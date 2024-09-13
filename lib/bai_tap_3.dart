@@ -1,7 +1,6 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class BaiTap03 extends StatefulWidget {
@@ -74,10 +73,17 @@ class _BaiTap03State extends State<BaiTap03> {
     return true; // Nếu không chia hết cho bất kỳ số nào thì là số nguyên tố.
   }
 
-  // Phương thức tính giai thừa của một số.
-  int _factorial(int num) {
-    if (num < 0) return 0; // Giai thừa không định nghĩa cho số âm.
-    return num == 0 ? 1 : num * _factorial(num - 1); // Giai thừa của num.
+  // Phương thức tính giai thừa của một số sử dụng BigInt.
+  BigInt _factorial(int num) {
+    if (num < 0) return BigInt.zero; // Giai thừa không định nghĩa cho số âm.
+    BigInt result = BigInt.one; // Bắt đầu với 1.
+
+    // Tính giai thừa từ 1 đến num.
+    for (int i = 1; i <= num; i++) {
+      result *= BigInt.from(i);
+    }
+
+    return result; // Trả về giai thừa sử dụng BigInt.
   }
 
   // Phương thức tính số Fibonacci thứ X.
@@ -101,8 +107,11 @@ class _BaiTap03State extends State<BaiTap03> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Kết quả'), // Tiêu đề của hộp thoại.
-          content:
-              Text(result), // Nội dung của hộp thoại chứa kết quả tính toán.
+          content: SingleChildScrollView(
+            // Thêm cuộn trang ở đây.
+            child:
+                Text(result), // Nội dung của hộp thoại chứa kết quả tính toán.
+          ),
           actions: [
             // Các hành động (nút) trong hộp thoại.
             TextButton(

@@ -8,54 +8,73 @@ class BaiTap02 extends StatefulWidget {
 }
 
 class _BaiTap02State extends State<BaiTap02> {
+  // Controllers để nhận giá trị từ các TextField
   final TextEditingController _aController = TextEditingController();
   final TextEditingController _bController = TextEditingController();
 
-  // Phương thức để tính toán số lượng và tổng các số chẵn chia hết cho 3 trong đoạn [a, b].
-  void _calculate() {
-    // Lấy giá trị từ các TextEditingController và chuyển đổi thành số nguyên.
-    final int a = int.tryParse(_aController.text) ?? 0;
-    final int b = int.tryParse(_bController.text) ?? 0;
+  // Hàm tính số lượng số chẵn chia hết cho 3 từ 1 đến n
+  int countEvenDivisibleBy3(int n) {
+    if (n < 6) return 0; // Nếu n nhỏ hơn 6 thì không có số chẵn chia hết cho 3
+    return n ~/ 6; // Chia n cho 6 để tìm số lượng số chẵn chia hết cho 3
+  }
 
-    // Kiểm tra nếu a lớn hơn b, hiển thị thông báo lỗi.
-    if (a > b) {
-      _showResult('Phạm vi không hợp lệ.Đảm bảo rằng A <= b.');
+  // Hàm tính tổng các số chẵn chia hết cho 3 từ 1 đến n
+  int sumEvenDivisibleBy3(int n) {
+    if (n < 6) return 0; // Nếu n nhỏ hơn 6 thì không có số chẵn chia hết cho 3
+    int count = countEvenDivisibleBy3(n);
+    return 6 *
+        count *
+        (count + 1) ~/
+        2; // Công thức tổng của các số chẵn chia hết cho 3
+  }
+
+  // Hàm xử lý tính toán và hiển thị kết quả
+  void _calculate() {
+    final int? a = int.tryParse(_aController.text);
+    final int? b = int.tryParse(_bController.text);
+
+    if (a == null || b == null || a > b) {
+      // Hiển thị thông báo lỗi nếu a hoặc b không hợp lệ
+      _showDialog('Vui lòng nhập các giá trị hợp lệ với a <= b.');
       return;
     }
 
-    // Khởi tạo biến để đếm số lượng và tính tổng.
-    int count = 0;
-    int sum = 0;
+    // Tính số lượng và tổng từ 1 đến b
+    int countB = countEvenDivisibleBy3(b);
+    int sumB = sumEvenDivisibleBy3(b);
 
-    // Duyệt qua các số trong đoạn [a, b].
-    for (int i = a; i <= b; i++) {
-      // Kiểm tra xem số hiện tại có phải là số chẵn chia hết cho 3 không.
-      if (i % 2 == 0 && i % 3 == 0) {
-        count++; // Tăng số lượng số chẵn chia hết cho 3.
-        sum += i; // Cộng số hiện tại vào tổng.
-      }
+    // Tính số lượng và tổng từ 1 đến a-1
+    int countA = countEvenDivisibleBy3(a - 1);
+    int sumA = sumEvenDivisibleBy3(a - 1);
+
+    // Tính số lượng và tổng trong khoảng từ a đến b
+    int count = countB - countA;
+    int totalSum = sumB - sumA;
+
+    if (totalSum + a + b > 0) {
+      // Hiển thị kết quả nếu tổng lớn hơn 0
+      _showDialog(
+          'Số lượng số chẵn chia hết cho 3: $count\nTổng của chúng: $totalSum');
+    } else {
+      // Hiển thị thông báo nếu không có số chẵn nào chia hết cho 3
+      _showDialog('Không có số chẵn nào chia hết cho 3 trong đoạn [a, b].');
     }
-
-    // Hiển thị kết quả trong một hộp thoại.
-    _showResult('Đếm: $count\nTổng: $sum');
   }
 
-  // Phương thức để hiển thị kết quả trong hộp thoại.
-  void _showResult(String result) {
+  // Hàm hiển thị hộp thoại với thông báo kết quả
+  void _showDialog(String message) {
     showDialog(
-      context: context, // Context của ứng dụng để hiển thị hộp thoại.
+      context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Kết quả'), // Tiêu đề của hộp thoại.
-          content:
-              Text(result), // Nội dung của hộp thoại, chứa kết quả tính toán.
-          actions: [
-            // Các hành động (nút) trong hộp thoại.
+          title: const Text('Kết Quả'),
+          content: Text(message),
+          actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Đóng hộp thoại khi nhấn nút OK.
+                Navigator.of(context).pop(); // Đóng hộp thoại khi nhấn nút Đóng
               },
-              child: const Text('Kết quả'),
+              child: const Text('Đóng'),
             ),
           ],
         );
@@ -67,33 +86,37 @@ class _BaiTap02State extends State<BaiTap02> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Đếm số lượng các số chắn chia hết cho 3'),
+        title: const Text('Số Chẵn Chia Hết Cho 3'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: [
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // TextField để nhập giá trị a
             TextField(
               controller: _aController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: 'Nhập số a:',
+                labelText: 'Nhập giá trị a',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
+            // TextField để nhập giá trị b
             TextField(
               controller: _bController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: 'Nhập số b:',
+                labelText: 'Nhập giá trị b',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
+            // Nút để thực hiện tính toán
             ElevatedButton(
               onPressed: _calculate,
-              child: const Text('Tính toán'),
+              child: const Text('Tính Toán'),
             ),
           ],
         ),
