@@ -10,65 +10,82 @@ class BaiTap01 extends StatefulWidget {
 class _BaiTap01State extends State<BaiTap01> {
   final TextEditingController _inputController = TextEditingController();
 
-  // Hàm mã hóa số theo nguyên tắc đã cho
-  String encodeNumber(String input) {
-    String result = ""; // Chuỗi kết quả mã hóa
-    int count = 1; // Biến đếm số lần xuất hiện liên tiếp của cùng một chữ số
+  // Hàm mã hóa số theo quy tắc đã cho.
+  String encode(String input) {
+    String result = "";
+    int count = 1;
 
-    // Duyệt qua từng ký tự trong chuỗi đầu vào, bắt đầu từ vị trí thứ 1
     for (int i = 1; i < input.length; i++) {
       if (input[i] == input[i - 1]) {
-        // Nếu ký tự hiện tại giống với ký tự trước đó
-        count++; // Tăng biến đếm
+        count++;
       } else {
-        // Nếu ký tự hiện tại khác ký tự trước đó
-        result += count.toString() +
-            input[i - 1]; // Thêm số lần xuất hiện và ký tự trước vào kết quả
-        count = 1; // Đặt lại biến đếm cho chuỗi tiếp theo
+        result += count.toString() + input[i - 1];
+        count = 1;
       }
     }
-
-    // Thêm ký tự cuối cùng và số lần xuất hiện của nó vào kết quả
-    result += count.toString() + input[input.length - 1];
-    return result; // Trả về chuỗi đã được mã hóa
+    result +=
+        count.toString() + input[input.length - 1]; // Xử lý phần cuối chuỗi
+    return result;
   }
 
-  // Hàm tìm số M từ N, không giới hạn số lần lặp
-  String findMtoN(String N) {
-    String current = "1"; // Bắt đầu từ số nhỏ nhất có thể, "1"
+  // Hàm giải mã từ chuỗi mã hóa về chuỗi trước đó (giải nén N về M)
+  String decode(String input) {
+    String result = "";
+    int i = 0;
 
-    // Lặp vô hạn để tiếp tục tìm kiếm số M
+    while (i < input.length) {
+      int count = int.parse(input[i]); // Lấy số lượng xuất hiện của ký tự
+      String digit = input[i + 1]; // Ký tự cần lặp lại
+      result += digit * count; // Thêm ký tự vào kết quả dựa trên số lần lặp lại
+      i += 2; // Chuyển đến cặp tiếp theo
+    }
+    return result;
+  }
+
+  // Hàm kiểm tra xem một số M có hợp lệ hay không
+  bool isValidM(String M) {
+    // Kiểm tra số lượng ký tự liên tiếp không vượt quá 9
+    RegExp pattern = RegExp(r'(.)\1{9,}');
+    return !pattern.hasMatch(M);
+  }
+
+  // Hàm tìm M từ N
+  String findM(String N) {
+    // Bắt đầu từ số N và giải mã liên tục để tìm số M
+    String current = N;
+    Set<String> visited = Set(); // Để theo dõi các chuỗi đã xử lý
+
     while (true) {
-      String nextEncode =
-          encodeNumber(current); // Mã hóa giá trị hiện tại của chuỗi `current`
+      String decoded = decode(current);
 
-      // Kiểm tra nếu mã hóa của `current` trùng với N, trả về số M hiện tại
-      if (nextEncode == N) {
-        return current;
-      }
-      // Nếu độ dài của chuỗi mã hóa lớn hơn N, không thể tìm thấy, thoát khỏi vòng lặp
-      else if (nextEncode.length > N.length) {
-        return "Không tìm thấy M"; // Trả về thông báo khi không tìm được số M
+      // Nếu mã hóa của chuỗi giải mã lại chính là N và chuỗi giải mã hợp lệ, đó là số M
+      if (encode(decoded) == N && isValidM(decoded)) {
+        return decoded;
       }
 
-      // Nếu chưa tìm thấy, cập nhật `current` bằng kết quả mã hóa mới và tiếp tục lặp
-      current = nextEncode;
+      // Nếu chuỗi đã giải mã không thay đổi hoặc đã xử lý rồi thì không tìm thấy
+      if (visited.contains(decoded) || decoded == current) {
+        return "Không tìm thấy M";
+      }
+
+      visited.add(current); // Đánh dấu chuỗi hiện tại đã xử lý
+      current = decoded; // Tiếp tục với chuỗi giải mã
     }
   }
 
-  // Hàm hiển thị kết quả qua popup (hộp thoại)
+  // Hàm hiển thị kết quả qua popup.
   void _showResult(BuildContext context, String result) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Kết quả"), // Tiêu đề hộp thoại
-          content: Text(result), // Nội dung hiển thị kết quả tìm được
+          title: const Text("Kết quả"),
+          content: Text(result),
           actions: <Widget>[
             TextButton(
-              child: const Text("OK"), // Nút bấm OK để đóng hộp thoại
+              child: const Text("OK"),
               onPressed: () {
-                Navigator.of(context).pop(); // Đóng hộp thoại khi nhấn OK
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -77,43 +94,38 @@ class _BaiTap01State extends State<BaiTap01> {
     );
   }
 
-  // Hàm xây dựng giao diện của ứng dụng
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mã Hóa Số"), // Tiêu đề của AppBar
+        title: const Text("Tìm Số M"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0), // Căn lề toàn màn hình
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            // Ô nhập liệu cho người dùng nhập số N
             TextField(
-              controller:
-                  _inputController, // Kết nối với bộ điều khiển để lấy dữ liệu nhập
+              controller: _inputController,
               decoration: const InputDecoration(
-                labelText: "Nhập số N", // Nhãn cho ô nhập liệu
-                border: OutlineInputBorder(), // Đường viền cho ô nhập
+                labelText: "Nhập số N",
+                border: OutlineInputBorder(),
               ),
-              keyboardType: TextInputType.number, // Chỉ cho phép nhập ký tự số
+              keyboardType: TextInputType.number, // Chỉ nhập số
             ),
-            const SizedBox(height: 20), // Khoảng cách giữa ô nhập và nút bấm
-            // Nút bấm để thực hiện tìm số M
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                String N = _inputController
-                    .text; // Lấy giá trị nhập vào từ ô TextField
+                String N =
+                    _inputController.text; // Lấy giá trị nhập từ TextField
                 if (N.isNotEmpty) {
-                  String M = findMtoN(N); // Gọi hàm tìm số M
+                  String M = findM(N); // Tìm số M
                   _showResult(
                       context, "Số M là: $M"); // Hiển thị kết quả qua popup
                 } else {
-                  _showResult(context,
-                      "Dữ liệu nhập không hợp lệ."); // Thông báo nếu nhập liệu không hợp lệ
+                  _showResult(context, "Dữ liệu nhập không hợp lệ.");
                 }
               },
-              child: const Text("Tìm số M"), // Nội dung nút bấm
+              child: const Text("Tìm số M"),
             ),
           ],
         ),

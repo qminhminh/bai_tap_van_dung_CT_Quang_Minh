@@ -85,24 +85,29 @@ class _BaiTap07State extends State<BaiTap07> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          TextField(
-            controller: _controller,
-            keyboardType: TextInputType.number, // Bàn phím số
-            decoration: const InputDecoration(
-              labelText: "Nhập số nguyên n",
-              border: OutlineInputBorder(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Bài Tập 07'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _controller,
+              keyboardType: TextInputType.number, // Bàn phím số
+              decoration: const InputDecoration(
+                labelText: "Nhập số nguyên n",
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: calculateDivisibleBy3, // Nút để tính toán
-            child: const Text("Tính toán"),
-          ),
-        ],
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: calculateDivisibleBy3, // Nút để tính toán
+              child: const Text("Tính toán"),
+            ),
+          ],
+        ),
       ),
     );
   }

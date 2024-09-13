@@ -8,6 +8,7 @@ import 'package:bai_tap_van_dung_cty/bai_tap_5.dart';
 import 'package:bai_tap_van_dung_cty/bai_tap_6.dart';
 import 'package:bai_tap_van_dung_cty/bai_tap_7.dart';
 import 'package:bai_tap_van_dung_cty/bai_tap_8.dart';
+import 'package:bai_tap_van_dung_cty/compo_buttton.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -34,84 +35,37 @@ class HomeScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BaiTap01()),
-                    );
-                  },
-                  child: Text('Bài tập 1'),
+                ExerciseButton(
+                  label: 'Bài tập 1',
+                  destination: BaiTap01(),
                 ),
-                Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BaiTap02()),
-                    );
-                  },
-                  child: Text('Bài tập 2'),
+                ExerciseButton(
+                  label: 'Bài tập 2',
+                  destination: BaiTap02(),
                 ),
-                Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BaiTap03()),
-                    );
-                  },
-                  child: Text('Bài tập 3'),
+                ExerciseButton(
+                  label: 'Bài tập 3',
+                  destination: BaiTap03(),
                 ),
-                Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BaiTap04()),
-                    );
-                  },
-                  child: Text('Bài tập 4'),
+                ExerciseButton(
+                  label: 'Bài tập 4',
+                  destination: BaiTap04(),
                 ),
-                Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BaiTap05()),
-                    );
-                  },
-                  child: Text('Bài tập 5'),
+                ExerciseButton(
+                  label: 'Bài tập 5',
+                  destination: BaiTap05(),
                 ),
-                Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BaiTap06()),
-                    );
-                  },
-                  child: Text('Bài tập 6'),
+                ExerciseButton(
+                  label: 'Bài tập 6',
+                  destination: BaiTap06(),
                 ),
-                Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BaiTap07()),
-                    );
-                  },
-                  child: Text('Bài tập 7'),
+                ExerciseButton(
+                  label: 'Bài tập 7',
+                  destination: BaiTap07(),
                 ),
-                Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BaiTap08()),
-                    );
-                  },
-                  child: Text('Bài tập 8'),
+                ExerciseButton(
+                  label: 'Bài tập 8',
+                  destination: BaiTap08(),
                 ),
               ],
             ),
