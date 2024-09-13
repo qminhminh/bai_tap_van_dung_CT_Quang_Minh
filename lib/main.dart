@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:bai_tap_van_dung_cty/bai_tap_1.dart';
 import 'package:bai_tap_van_dung_cty/bai_tap_2.dart';
@@ -18,12 +18,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Padding(
+      debugShowCheckedModeBanner: false,
+      home: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
-              children: <Widget>[
+              children: [
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -91,7 +101,7 @@ class MyApp extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => BaiTap07()),
                     );
                   },
-                  child: Text('Bài tập 6'),
+                  child: Text('Bài tập 7'),
                 ),
                 Divider(),
                 ElevatedButton(
@@ -101,7 +111,7 @@ class MyApp extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => BaiTap08()),
                     );
                   },
-                  child: Text('Bài tập 6'),
+                  child: Text('Bài tập 8'),
                 ),
               ],
             ),
