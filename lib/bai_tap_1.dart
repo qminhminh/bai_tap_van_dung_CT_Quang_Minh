@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 
@@ -10,47 +10,29 @@ class BaiTap01 extends StatefulWidget {
 class _BaiTap01State extends State<BaiTap01> {
   final TextEditingController _numberController = TextEditingController();
 
-  // Function to find the original number M
-  void _findM(String n) {
-    String prevN;
+  // Hàm giải mã chuỗi, tìm lại M từ N
+  String decode(String encoded) {
+    // Giữ chuỗi hiện tại là chuỗi kết quả ban đầu
+    String current = encoded;
+
     while (true) {
-      prevN = n;
-      n = _decode(n);
-      if (n == prevN) break;
-    }
-    _showResultDialog(n);
-  }
+      String next = '';
+      int i = 0;
 
-  // Helper function to decode the number
-  String _decode(String n) {
-    String result = '';
-    int count = 1;
-    for (int i = 1; i < n.length; i++) {
-      if (n[i] == n[i - 1]) {
-        count++;
-      } else {
-        result += '$count${n[i - 1]}';
-        count = 1;
+      // Thực hiện việc giải mã theo dạng: "2" -> số lần lặp, "1" -> số xuất hiện
+      while (i < current.length) {
+        int repeatCount = int.parse(current[i]); // Số lần lặp của số
+        String digit = current[i + 1]; // Số cần lặp
+        next += digit * repeatCount; // Thêm vào kết quả số được lặp nhiều lần
+        i += 2; // Tăng i để bỏ qua số đã được xử lý
       }
-    }
-    result += '$count${n[n.length - 1]}';
-    return result;
-  }
 
-  void _decodeInput() {
-    String input = _numberController.text.trim();
+      // Kiểm tra điều kiện dừng: Nếu chiều dài chuỗi giải mã <= 3, chuỗi đã quay về trạng thái ban đầu
+      if (next.length <= 3) {
+        return next; // Đây là số M ban đầu
+      }
 
-    // Validate input: check if it's non-empty and only digits
-    if (input.isEmpty || !RegExp(r'^[0-9]+$').hasMatch(input)) {
-      _showErrorDialog("Please enter a valid encoded number (digits only).");
-      return;
-    }
-
-    // Find the original number M
-    try {
-      _findM(input);
-    } catch (e) {
-      _showErrorDialog(e.toString());
+      current = next; // Cập nhật chuỗi cho lần lặp tiếp theo
     }
   }
 
@@ -60,7 +42,7 @@ class _BaiTap01State extends State<BaiTap01> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Original Number M'),
+          title: const Text('Số gốc m'),
           content: Text(result),
           actions: <Widget>[
             TextButton(
@@ -96,11 +78,28 @@ class _BaiTap01State extends State<BaiTap01> {
     );
   }
 
+  // Handle decoding input
+  void _decodeInput() {
+    final String input = _numberController.text;
+
+    if (input.isEmpty) {
+      _showErrorDialog('Vui lòng nhập một số được mã hóa.');
+      return;
+    }
+
+    try {
+      final String result = decode(input);
+      _showResultDialog(result);
+    } catch (e) {
+      _showErrorDialog('Một lỗi đã xảy ra trong khi giải mã.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Decode Number'),
+        title: const Text('Số giải mã'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -110,7 +109,7 @@ class _BaiTap01State extends State<BaiTap01> {
               controller: _numberController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: 'Enter encoded number N',
+                labelText: 'Nhập số được mã hóa n',
               ),
             ),
             const SizedBox(height: 20),
