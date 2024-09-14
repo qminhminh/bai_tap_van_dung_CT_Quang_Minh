@@ -77,6 +77,26 @@ class _BaiTap05State extends State<BaiTap05> {
     );
   }
 
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +121,7 @@ class _BaiTap05State extends State<BaiTap05> {
                   _examsController, // Controller để lấy dữ liệu thời gian cuộc thi
               decoration: const InputDecoration(
                   labelText:
-                      'Nhập thời gian bắt đầu và kết thúc cho từng cuộc thi (S, F)'), // Nhãn cho ô nhập liệu
+                      'Nhập thời gian bắt đầu và kết thúc cho từng cuộc thi Vd: 1,2 xuống dòng 2,3'), // Nhãn cho ô nhập liệu
               maxLines: null, // Cho phép nhiều dòng nhập liệu
               keyboardType:
                   TextInputType.multiline, // Bàn phím cho phép nhập nhiều dòng

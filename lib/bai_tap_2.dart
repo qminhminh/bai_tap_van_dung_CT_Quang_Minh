@@ -13,7 +13,7 @@ class _BaiTap02State extends State<BaiTap02> {
   final TextEditingController _bController = TextEditingController();
 
   // Hàm tính số lượng số chẵn chia hết cho 3 từ 1 đến n
-  int countEvenDivisibleBy3(int n) {
+  int countEvenDivisible(int n) {
     if (n < 6) return 0; // Nếu n nhỏ hơn 6 thì không có số chẵn chia hết cho 3
     return n ~/ 6; // Chia n cho 6 để tìm số lượng số chẵn chia hết cho 3
   }
@@ -21,7 +21,7 @@ class _BaiTap02State extends State<BaiTap02> {
   // Hàm tính tổng các số chẵn chia hết cho 3 từ 1 đến n
   int sumEvenDivisibleBy3(int n) {
     if (n < 6) return 0; // Nếu n nhỏ hơn 6 thì không có số chẵn chia hết cho 3
-    int count = countEvenDivisibleBy3(n);
+    int count = countEvenDivisible(n);
     return 6 *
         count *
         (count + 1) ~/
@@ -33,18 +33,18 @@ class _BaiTap02State extends State<BaiTap02> {
     final int? a = int.tryParse(_aController.text);
     final int? b = int.tryParse(_bController.text);
 
-    if (a == null || b == null || a > b) {
+    if (a == null || b == null || a > b || a > 10 ^ 15 || b > 10 ^ 15) {
       // Hiển thị thông báo lỗi nếu a hoặc b không hợp lệ
-      _showDialog('Vui lòng nhập các giá trị hợp lệ với a <= b.');
+      _showDialog('Vui lòng nhập các giá trị hợp lệ.');
       return;
     }
 
     // Tính số lượng và tổng từ 1 đến b
-    int countB = countEvenDivisibleBy3(b);
+    int countB = countEvenDivisible(b);
     int sumB = sumEvenDivisibleBy3(b);
 
     // Tính số lượng và tổng từ 1 đến a-1
-    int countA = countEvenDivisibleBy3(a - 1);
+    int countA = countEvenDivisible(a - 1);
     int sumA = sumEvenDivisibleBy3(a - 1);
 
     // Tính số lượng và tổng trong khoảng từ a đến b

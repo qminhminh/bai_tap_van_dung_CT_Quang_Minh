@@ -12,11 +12,6 @@ class _BaiTap07State extends State<BaiTap07> {
   List<int> divisible = []; // Danh sách chứa các số chia hết cho 3
   int countDivisible = 0; // Đếm số lượng các số chia hết cho 3
 
-  // Hàm kiểm tra xem một số có chia hết cho 3 hay không
-  bool _isDivisible(int number) {
-    return number % 3 == 0;
-  }
-
   // Hàm tạo các số mới từ số n bằng cách xóa các chữ số liên tiếp
   Set<int> generateNumbers(int number) {
     String numtoStr = number.toString();
@@ -26,11 +21,15 @@ class _BaiTap07State extends State<BaiTap07> {
     for (int i = 0; i < numtoStr.length; i++) {
       for (int j = i + 1; j <= numtoStr.length; j++) {
         // Lấy một phần của chuỗi nStr và loại bỏ các số 0 ở đầu
-        String sub = numtoStr.substring(i, j).replaceFirst(RegExp(r'^0+'), '');
+        String sub = numtoStr.substring(0, i) + numtoStr.substring(j);
 
         // Nếu chuỗi con không rỗng, thêm số đó vào tập kết quả
         if (sub.isNotEmpty) {
-          resultSet.add(int.parse(sub));
+          int num = int.parse(sub);
+          // Loại bỏ các số có chữ số bắt đầu bằng 0
+          if (sub.length == numtoStr.length - 1 || sub[0] != '0') {
+            resultSet.add(num);
+          }
         }
       }
     }
@@ -38,8 +37,8 @@ class _BaiTap07State extends State<BaiTap07> {
     return resultSet;
   }
 
-  // Hàm xử lý khi người dùng nhấn nút "Tính toán"
-  void calculateDivisibleBy3() {
+  // Hàm tính các số chia hết cho 3
+  void calculateDivisible() {
     setState(() {
       divisible.clear(); // Xóa danh sách cũ
       countDivisible = 0; // Đặt lại số lượng
@@ -48,10 +47,10 @@ class _BaiTap07State extends State<BaiTap07> {
       Set<int> numberSet = generateNumbers(number); // Sinh các số từ n
 
       // Lặp qua tất cả các số trong tập D
-      for (int numbers in numberSet) {
-        // Nếu số đó chia hết cho 3, thêm vào danh sách và tăng số lượng
-        if (_isDivisible(numbers)) {
-          divisible.add(numbers);
+      for (int num in numberSet) {
+        if (num % 3 == 0) {
+          // Nếu số đó chia hết cho 3
+          divisible.add(num);
           countDivisible++;
         }
       }
@@ -87,7 +86,7 @@ class _BaiTap07State extends State<BaiTap07> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bài Tập 07'),
+        title: const Text('Tính số chia hết cho 3'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -103,7 +102,7 @@ class _BaiTap07State extends State<BaiTap07> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: calculateDivisibleBy3, // Nút để tính toán
+              onPressed: calculateDivisible, // Nút để tính toán
               child: const Text("Tính toán"),
             ),
           ],

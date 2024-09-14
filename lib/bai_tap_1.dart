@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors
+// ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors, prefer_is_empty
 
 import 'package:flutter/material.dart';
 
@@ -57,7 +57,7 @@ class _BaiTap01State extends State<BaiTap01> {
     );
   }
 
-  // Function to show error in a dialog
+  //Chức năng hiển thị lỗi trong hộp thoại
   void _showErrorDialog(String message) {
     showDialog(
       context: context,

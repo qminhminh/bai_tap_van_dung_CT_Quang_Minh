@@ -19,51 +19,75 @@ class _BaiTap03State extends State<BaiTap03> {
     final input = _numbersController.text;
     final numbers =
         input.split(',').map((e) => int.tryParse(e.trim()) ?? 0).toList();
-
-    // Kiểm tra nếu danh sách số trống.
-    if (numbers.isEmpty) {
-      _showResult('No'); // Hiển thị "No" nếu không có số.
-      return;
-    }
-
-    // Loại bỏ số trùng lặp, sắp xếp theo thứ tự giảm dần.
-    final sortedNumbers = numbers.toSet().toList()
-      ..sort((a, b) => b.compareTo(a));
-
-    // Kiểm tra nếu không có đủ số để xác định số lớn thứ hai.
-    if (sortedNumbers.length < 2) {
-      _showResult('No'); // Hiển thị "No" nếu không có số lớn thứ hai.
-      return;
-    }
-
-    // Lấy số lớn thứ hai từ danh sách đã sắp xếp.
-    final secondLargest = sortedNumbers[1];
-
-    // Kiểm tra xem số lớn thứ hai có phải là số chẵn hay lẻ.
-    final isEven = secondLargest % 2 == 0;
-    // Kiểm tra xem số lớn thứ hai có phải là số nguyên tố.
-    final isPrime = _isPrime(secondLargest);
-
-    // Tính giai thừa của số lớn thứ hai, kiểm tra giá trị số lớn
-    String factorial;
-    if (secondLargest < 100000) {
-      factorial = _factorial(secondLargest)
-          .toString(); // Dùng BigInt cho số không quá lớn
+    if (numbers.any((number) => number < 0)) {
+      _showErrorDialog("số phải lớn hơn 0");
     } else {
-      factorial = _stirlingApproximation(secondLargest)
-          .toStringAsFixed(10); // Dùng phép xấp xỉ Stirling
+      // Kiểm tra nếu danh sách số trống hoặc có số nhỏ hơn 0.
+      if (numbers.isEmpty) {
+        _showResult('No'); // Hiển thị "No" nếu không có số.
+        return;
+      }
+
+      // Loại bỏ số trùng lặp, sắp xếp theo thứ tự giảm dần.
+      final sortedNumbers = numbers.toSet().toList()
+        ..sort((a, b) => b.compareTo(a));
+
+      // Kiểm tra nếu không có đủ số để xác định số lớn thứ hai.
+      if (sortedNumbers.length < 2) {
+        _showResult('No'); // Hiển thị "No" nếu không có số lớn thứ hai.
+        return;
+      }
+
+      // Lấy số lớn thứ hai từ danh sách đã sắp xếp.
+      final secondLargest = sortedNumbers[1];
+
+      // Kiểm tra xem số lớn thứ hai có phải là số chẵn hay lẻ.
+      final isEven = secondLargest % 2 == 0;
+      // Kiểm tra xem số lớn thứ hai có phải là số nguyên tố.
+      final isPrime = _isPrime(secondLargest);
+
+      // Tính giai thừa của số lớn thứ hai, kiểm tra giá trị số lớn
+      String factorial;
+      if (secondLargest < 100000) {
+        factorial = _factorial(secondLargest)
+            .toString(); // Dùng BigInt cho số không quá lớn
+      } else {
+        factorial = _stirlingApproximation(secondLargest)
+            .toStringAsFixed(10); // Dùng phép xấp xỉ Stirling
+      }
+
+      // Tính số Fibonacci thứ X (X là số lớn thứ hai).
+      final fibonacci = _fibonacciMatrix(secondLargest);
+
+      // Hiển thị kết quả trong hộp thoại.
+      _showResult(
+        'Số lớn thứ hai: $secondLargest\n' // Số lớn thứ hai.
+        'Chẵn/Lẻ: ${isEven ? "Yes" : "No"}\n' // Kiểm tra chẵn/lẻ.
+        'Nguyên tố: ${isPrime ? "Yes" : "No"}\n' // Kiểm tra số nguyên tố.
+        'Giai thừa: $factorial\n' // Giai thừa của số lớn thứ hai (hoặc phép xấp xỉ Stirling).
+        'Fibonacci: $fibonacci', // Số Fibonacci thứ X.
+      );
     }
+  }
 
-    // Tính số Fibonacci thứ X (X là số lớn thứ hai).
-    final fibonacci = _fibonacciMatrix(secondLargest);
-
-    // Hiển thị kết quả trong hộp thoại.
-    _showResult(
-      'Số lớn thứ hai: $secondLargest\n' // Số lớn thứ hai.
-      'Chẵn/Lẻ: ${isEven ? "Yes" : "No"}\n' // Kiểm tra chẵn/lẻ.
-      'Nguyên tố: ${isPrime ? "Yes" : "No"}\n' // Kiểm tra số nguyên tố.
-      'Giai thừa: $factorial\n' // Giai thừa của số lớn thứ hai (hoặc phép xấp xỉ Stirling).
-      'Fibonacci: $fibonacci', // Số Fibonacci thứ X.
+  // Chức năng hiển thị lỗi trong hộp thoại
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
