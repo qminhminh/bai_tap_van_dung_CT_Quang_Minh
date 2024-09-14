@@ -43,17 +43,26 @@ class _BaiTap03State extends State<BaiTap03> {
     final isEven = secondLargest % 2 == 0;
     // Kiểm tra xem số lớn thứ hai có phải là số nguyên tố.
     final isPrime = _isPrime(secondLargest);
-    // Tính giai thừa của số lớn thứ hai.
-    final factorial = _factorial(secondLargest);
+
+    // Tính giai thừa của số lớn thứ hai, kiểm tra giá trị số lớn
+    String factorial;
+    if (secondLargest < 100000) {
+      factorial = _factorial(secondLargest)
+          .toString(); // Dùng BigInt cho số không quá lớn
+    } else {
+      factorial = _stirlingApproximation(secondLargest)
+          .toStringAsFixed(10); // Dùng phép xấp xỉ Stirling
+    }
+
     // Tính số Fibonacci thứ X (X là số lớn thứ hai).
-    final fibonacci = _fibonacci(secondLargest);
+    final fibonacci = _fibonacciMatrix(secondLargest);
 
     // Hiển thị kết quả trong hộp thoại.
     _showResult(
       'Số lớn thứ hai: $secondLargest\n' // Số lớn thứ hai.
       'Chẵn/Lẻ: ${isEven ? "Yes" : "No"}\n' // Kiểm tra chẵn/lẻ.
       'Nguyên tố: ${isPrime ? "Yes" : "No"}\n' // Kiểm tra số nguyên tố.
-      'Giai thừa: $factorial\n' // Giai thừa của số lớn thứ hai.
+      'Giai thừa: $factorial\n' // Giai thừa của số lớn thứ hai (hoặc phép xấp xỉ Stirling).
       'Fibonacci: $fibonacci', // Số Fibonacci thứ X.
     );
   }
@@ -86,18 +95,60 @@ class _BaiTap03State extends State<BaiTap03> {
     return result; // Trả về giai thừa sử dụng BigInt.
   }
 
-  // Phương thức tính số Fibonacci thứ X.
-  int _fibonacci(int num) {
-    if (num < 0) return 0; // Số Fibonacci không định nghĩa cho số âm.
-    if (num == 0) return 0; // Số Fibonacci thứ 0 là 0.
-    if (num == 1) return 1; // Số Fibonacci thứ 1 là 1.
-    int a = 0, b = 1, c;
-    for (int i = 2; i <= num; i++) {
-      c = a + b; // Tính số Fibonacci tiếp theo.
-      a = b; // Cập nhật giá trị của a.
-      b = c; // Cập nhật giá trị của b.
+  // Phương thức tính giai thừa theo xấp xỉ Stirling cho số lớn.
+  double _stirlingApproximation(int n) {
+    double pi = 3.1415926535897932;
+    double e = 2.718281828459045;
+    return sqrt(2 * pi * n) * pow(n / e, n);
+  }
+
+  // Phương thức tính số Fibonacci thứ X sử dụng thuật toán ma trận.
+  BigInt _fibonacciMatrix(int n) {
+    if (n < 0) return BigInt.zero;
+    if (n == 0) return BigInt.zero;
+    if (n == 1) return BigInt.one;
+
+    // Ma trận cơ sở [[1, 1], [1, 0]]
+    List<List<BigInt>> F = [
+      [BigInt.one, BigInt.one],
+      [BigInt.one, BigInt.zero]
+    ];
+
+    // Nâng ma trận cơ sở lên lũy thừa (n - 1)
+    _matrixPower(F, n - 1);
+
+    // Kết quả Fibonacci là F[0][0] sau khi tính xong
+    return F[0][0];
+  }
+
+  void _matrixPower(List<List<BigInt>> F, int n) {
+    if (n <= 1) return;
+
+    // Ma trận cơ sở để nhân
+    List<List<BigInt>> M = [
+      [BigInt.one, BigInt.one],
+      [BigInt.one, BigInt.zero]
+    ];
+
+    _matrixPower(F, n ~/ 2); // Đệ quy tính lũy thừa ma trận
+    _multiplyMatrices(F, F); // Nhân ma trận F với chính nó
+
+    if (n % 2 != 0) {
+      _multiplyMatrices(F, M); // Nhân thêm ma trận cơ sở nếu n lẻ
     }
-    return b; // Trả về số Fibonacci thứ X.
+  }
+
+  void _multiplyMatrices(List<List<BigInt>> F, List<List<BigInt>> M) {
+    // Tính toán nhân hai ma trận 2x2
+    BigInt x = F[0][0] * M[0][0] + F[0][1] * M[1][0];
+    BigInt y = F[0][0] * M[0][1] + F[0][1] * M[1][1];
+    BigInt z = F[1][0] * M[0][0] + F[1][1] * M[1][0];
+    BigInt w = F[1][0] * M[0][1] + F[1][1] * M[1][1];
+
+    F[0][0] = x;
+    F[0][1] = y;
+    F[1][0] = z;
+    F[1][1] = w;
   }
 
   // Phương thức để hiển thị kết quả trong hộp thoại.
@@ -148,14 +199,12 @@ class _BaiTap03State extends State<BaiTap03> {
                 border: OutlineInputBorder(), // Viền cho trường nhập liệu.
               ),
             ),
-            const SizedBox(
-                height:
-                    16), // Khoảng cách giữa các trường nhập liệu và nút bấm.
-            // Nút bấm để thực hiện xử lý dãy số.
+            const SizedBox(height: 16.0), // Khoảng cách giữa các thành phần.
+            // Nút bấm để xử lý khi người dùng nhập số xong.
             ElevatedButton(
               onPressed:
-                  _processNumbers, // Gọi phương thức _processNumbers khi nhấn nút.
-              child: const Text('Kết quả'), // Văn bản trên nút bấm.
+                  _processNumbers, // Gọi phương thức xử lý khi nhấn nút bấm.
+              child: const Text('Tìm và xử lý số lớn thứ hai'), // Nhãn nút.
             ),
           ],
         ),
