@@ -28,42 +28,14 @@ class _BaiTap08State extends State<BaiTap08> {
   // Hàm tính tổng tiền điện cho cả 3 loại điện
   int calculateElectricityBill(int x1, int y1, int x2, int y2, int x3, int y3,
       int a1, int b1, int c1, int a2, int b2, int c2, int a3, int b3, int c3) {
-    if (x2 >= 0 &&
-        y2 <= 10 ^ 7 &&
-        x3 >= 0 &&
-        y3 <= 10 ^ 7 &&
-        x1 >= 0 &&
-        y1 <= 10 ^ 7 &&
-        a1 >= 0 &&
-        a1 <= 1000 &&
-        b1 >= 0 &&
-        b1 <= 1000 &&
-        c1 >= 0 &&
-        c1 <= 1000 &&
-        a2 >= 0 &&
-        a2 <= 1000 &&
-        b2 >= 0 &&
-        b2 <= 1000 &&
-        c2 >= 0 &&
-        c2 <= 1000 &&
-        a3 >= 0 &&
-        a3 <= 1000 &&
-        b3 >= 0 &&
-        b3 <= 1000 &&
-        c3 >= 0 &&
-        c3 <= 1000) {
-      // Tính tiền điện tiêu dùng
-      int tieuDung = calculateUsage(x1, y1, a1, b1, c1, 50, 100);
-      // Tính tiền điện sản xuất
-      int sanXuat = calculateUsage(x2, y2, a2, b2, c2, 200, 800);
-      // Tính tiền điện kinh doanh
-      int kinhDoanh = calculateUsage(x3, y3, a3, b3, c3, 100, 100);
-      // Trả về tổng số tiền phải trả
-      return tieuDung + sanXuat + kinhDoanh;
-    } else {
-      _showErrorDialog('Vui lòng nhập giá trị hợp lệ');
-      return -1;
-    }
+    // Tính tiền điện tiêu dùng
+    int tieuDung = calculateUsage(x1, y1, a1, b1, c1, 50, 100);
+    // Tính tiền điện sản xuất
+    int sanXuat = calculateUsage(x2, y2, a2, b2, c2, 200, 800);
+    // Tính tiền điện kinh doanh
+    int kinhDoanh = calculateUsage(x3, y3, a3, b3, c3, 100, 100);
+    // Trả về tổng số tiền phải trả
+    return tieuDung + sanXuat + kinhDoanh;
   }
 
   // Hàm tính toán tiền điện cho từng loại
@@ -99,10 +71,8 @@ class _BaiTap08State extends State<BaiTap08> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Kết quả'), // Tiêu đề của popup
-          content: result == -1
-              ? const Text('Vui lòng nhập giá trị hợp lệ')
-              : Text(
-                  'Tổng số tiền điện phải trả: $result đồng'), // Nội dung popup
+          content: Text(
+              'Tổng số tiền điện phải trả: $result đồng'), // Nội dung popup
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),
