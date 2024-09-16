@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class BaiTap08 extends StatefulWidget {
@@ -8,97 +10,115 @@ class BaiTap08 extends StatefulWidget {
 }
 
 class _BaiTap08State extends State<BaiTap08> {
-  // Khởi tạo các TextEditingController để nhận dữ liệu nhập từ bàn phím
-  final TextEditingController _x1Controller = TextEditingController();
-  final TextEditingController _y1Controller = TextEditingController();
-  final TextEditingController _x2Controller = TextEditingController();
-  final TextEditingController _y2Controller = TextEditingController();
-  final TextEditingController _x3Controller = TextEditingController();
-  final TextEditingController _y3Controller = TextEditingController();
-  final TextEditingController _a1Controller = TextEditingController();
-  final TextEditingController _b1Controller = TextEditingController();
-  final TextEditingController _c1Controller = TextEditingController();
-  final TextEditingController _a2Controller = TextEditingController();
-  final TextEditingController _b2Controller = TextEditingController();
-  final TextEditingController _c2Controller = TextEditingController();
-  final TextEditingController _a3Controller = TextEditingController();
-  final TextEditingController _b3Controller = TextEditingController();
-  final TextEditingController _c3Controller = TextEditingController();
+  final TextEditingController x1Controller = TextEditingController();
+  final TextEditingController y1Controller = TextEditingController();
+  final TextEditingController x2Controller = TextEditingController();
+  final TextEditingController y2Controller = TextEditingController();
+  final TextEditingController x3Controller = TextEditingController();
+  final TextEditingController y3Controller = TextEditingController();
+  final TextEditingController a1Controller = TextEditingController();
+  final TextEditingController b1Controller = TextEditingController();
+  final TextEditingController c1Controller = TextEditingController();
+  final TextEditingController a2Controller = TextEditingController();
+  final TextEditingController b2Controller = TextEditingController();
+  final TextEditingController c2Controller = TextEditingController();
+  final TextEditingController a3Controller = TextEditingController();
+  final TextEditingController b3Controller = TextEditingController();
+  final TextEditingController c3Controller = TextEditingController();
 
-  // Hàm tính tổng tiền điện cho cả 3 loại điện
-  int calculateElectricityBill(int x1, int y1, int x2, int y2, int x3, int y3,
-      int a1, int b1, int c1, int a2, int b2, int c2, int a3, int b3, int c3) {
-    // Tính tiền điện tiêu dùng
-    int tieuDung = calculateUsage(x1, y1, a1, b1, c1, 50, 100);
-    // Tính tiền điện sản xuất
-    int sanXuat = calculateUsage(x2, y2, a2, b2, c2, 200, 800);
-    // Tính tiền điện kinh doanh
-    int kinhDoanh = calculateUsage(x3, y3, a3, b3, c3, 100, 100);
-    // Trả về tổng số tiền phải trả
-    return tieuDung + sanXuat + kinhDoanh;
-  }
+  String result = "";
 
-  // Hàm tính toán tiền điện cho từng loại
-  int calculateUsage(
-      int start, int end, int a, int b, int c, int limit1, int limit2) {
-    // Tính tổng lượng điện tiêu thụ trong tháng
-    int totalpasspower = end - start;
-    int cost = 0; // Biến lưu tổng chi phí cho loại điện này
+  void calculateCost() {
+    // Parse inputs from controllers
+    int X1 = int.parse(x1Controller.text);
+    int Y1 = int.parse(y1Controller.text);
+    int X2 = int.parse(x2Controller.text);
+    int Y2 = int.parse(y2Controller.text);
+    int X3 = int.parse(x3Controller.text);
+    int Y3 = int.parse(y3Controller.text);
 
-    // Kiểm tra nếu tiêu thụ trong giới hạn 1
-    if (totalpasspower <= limit1) {
-      cost =
-          totalpasspower * a; // Nếu tiêu thụ nhỏ hơn giới hạn 1, tính với giá A
+    int A1 = int.parse(a1Controller.text);
+    int B1 = int.parse(b1Controller.text);
+    int C1 = int.parse(c1Controller.text);
+    int A2 = int.parse(a2Controller.text);
+    int B2 = int.parse(b2Controller.text);
+    int C2 = int.parse(c2Controller.text);
+    int A3 = int.parse(a3Controller.text);
+    int B3 = int.parse(b3Controller.text);
+    int C3 = int.parse(c3Controller.text);
+
+    // Calculate usage
+    int usage1 = Y1 - X1;
+    int usage2 = Y2 - X2;
+    int usage3 = Y3 - X3;
+
+    int totalCost = 0;
+
+    // Tính chi phí cho hộ gia đình (loại 1)
+    if (usage1 <= 50) {
+      // Nếu mức tiêu thụ nhỏ hơn hoặc bằng 50 kWh, chi phí tính bằng giá A1 cho mỗi kWh.
+      totalCost += usage1 * A1;
+    } else if (usage1 <= 150) {
+      // Nếu mức tiêu thụ lớn hơn 50 kWh và nhỏ hơn hoặc bằng 150 kWh:
+      // - Tính chi phí cho 50 kWh đầu tiên theo giá A1.
+      // - Tính chi phí cho phần mức tiêu thụ vượt quá 50 kWh (từ 51 đến 150) theo giá B1.
+      totalCost += 50 * A1 + (usage1 - 50) * B1;
+    } else {
+      // Nếu mức tiêu thụ lớn hơn 150 kWh:
+      // - Tính chi phí cho 50 kWh đầu tiên theo giá A1.
+      // - Tính chi phí cho 100 kWh tiếp theo (từ 51 đến 150) theo giá B1.
+      // - Tính chi phí cho phần mức tiêu thụ vượt quá 150 kWh (trên 150) theo giá C1.
+      totalCost += 50 * A1 + 100 * B1 + (usage1 - 150) * C1;
     }
-    // Kiểm tra nếu tiêu thụ trong giới hạn 2
-    else if (totalpasspower <= limit1 + limit2) {
-      // Tính tiền cho giới hạn 1 và phần còn lại trong giới hạn 2
-      cost = limit1 * a + (totalpasspower - limit1) * b;
-    }
-    // Nếu tiêu thụ vượt qua giới hạn 2
-    else {
-      // Tính tiền cho cả giới hạn 1, giới hạn 2 và phần vượt giới hạn
-      cost = limit1 * a + limit2 * b + (totalpasspower - limit1 - limit2) * c;
+
+// Tính chi phí cho công nghiệp (loại 2)
+    if (usage2 <= 200) {
+      // Nếu mức tiêu thụ nhỏ hơn hoặc bằng 200 kWh, chi phí tính bằng giá A2 cho mỗi kWh.
+      totalCost += usage2 * A2;
+    } else if (usage2 <= 1000) {
+      // Nếu mức tiêu thụ lớn hơn 200 kWh và nhỏ hơn hoặc bằng 1000 kWh:
+      // - Tính chi phí cho 200 kWh đầu tiên theo giá A2.
+      // - Tính chi phí cho phần mức tiêu thụ vượt quá 200 kWh (từ 201 đến 1000) theo giá B2.
+      totalCost += 200 * A2 + (usage2 - 200) * B2;
+    } else {
+      // Nếu mức tiêu thụ lớn hơn 1000 kWh:
+      // - Tính chi phí cho 200 kWh đầu tiên theo giá A2.
+      // - Tính chi phí cho 800 kWh tiếp theo (từ 201 đến 1000) theo giá B2.
+      // - Tính chi phí cho phần mức tiêu thụ vượt quá 1000 kWh (trên 1000) theo giá C2.
+      totalCost += 200 * A2 + 800 * B2 + (usage2 - 1000) * C2;
     }
 
-    return cost; // Trả về tổng chi phí cho loại điện này
-  }
+// Tính chi phí cho doanh nghiệp (loại 3)
+    if (usage3 <= 100) {
+      // Nếu mức tiêu thụ nhỏ hơn hoặc bằng 100 kWh, chi phí tính bằng giá A3 cho mỗi kWh.
+      totalCost += usage3 * A3;
+    } else if (usage3 <= 200) {
+      // Nếu mức tiêu thụ lớn hơn 100 kWh và nhỏ hơn hoặc bằng 200 kWh:
+      // - Tính chi phí cho 100 kWh đầu tiên theo giá A3.
+      // - Tính chi phí cho phần mức tiêu thụ vượt quá 100 kWh (từ 101 đến 200) theo giá B3.
+      totalCost += 100 * A3 + (usage3 - 100) * B3;
+    } else {
+      // Nếu mức tiêu thụ lớn hơn 200 kWh:
+      // - Tính chi phí cho 100 kWh đầu tiên theo giá A3.
+      // - Tính chi phí cho 100 kWh tiếp theo (từ 101 đến 200) theo giá B3.
+      // - Tính chi phí cho phần mức tiêu thụ vượt quá 200 kWh (trên 200) theo giá C3.
+      totalCost += 100 * A3 + 100 * B3 + (usage3 - 200) * C3;
+    }
 
-  // Hàm hiển thị kết quả dưới dạng popup
-  void _showResult(BuildContext context, int result) {
+    // Hiển thị kết quả qua dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Kết quả'), // Tiêu đề của popup
+          title: const Text('Kết quả'),
           content: Text(
-              'Tổng số tiền điện phải trả: $result đồng'), // Nội dung popup
+              'Số phòng tối thiểu cần dùng: $totalCost'), // Nội dung của dialog
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Đóng popup khi nhấn OK
+                Navigator.of(context).pop(); // Đóng dialog
               },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              child: const Text('OK'), // Nút OK để đóng dialog
             ),
           ],
         );
@@ -108,148 +128,48 @@ class _BaiTap08State extends State<BaiTap08> {
 
   @override
   Widget build(BuildContext context) {
+    // Tạo danh sách các controller và nhãn
+    final List<Map<String, dynamic>> controllers = [
+      {'label': 'X1', 'controller': x1Controller},
+      {'label': 'Y1', 'controller': y1Controller},
+      {'label': 'X2', 'controller': x2Controller},
+      {'label': 'Y2', 'controller': y2Controller},
+      {'label': 'X3', 'controller': x3Controller},
+      {'label': 'Y3', 'controller': y3Controller},
+      {'label': 'A1', 'controller': a1Controller},
+      {'label': 'B1', 'controller': b1Controller},
+      {'label': 'C1', 'controller': c1Controller},
+      {'label': 'A2', 'controller': a2Controller},
+      {'label': 'B2', 'controller': b2Controller},
+      {'label': 'C2', 'controller': c2Controller},
+      {'label': 'A3', 'controller': a3Controller},
+      {'label': 'B3', 'controller': b3Controller},
+      {'label': 'C3', 'controller': c3Controller},
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tính tiền điện'), // Tiêu đề trên thanh AppBar
+        title: const Text('BaiTap08'),
       ),
       body: SingleChildScrollView(
-        padding:
-            const EdgeInsets.all(16.0), // Thêm khoảng cách xung quanh nội dung
-        child: Column(
-          children: <Widget>[
-            // TextField để nhập chỉ số điện tiêu dùng X1
-            TextField(
-              controller: _x1Controller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  labelText: 'Nhập chỉ số X1 (điện tiêu dùng)'),
-            ),
-            // TextField để nhập chỉ số điện tiêu dùng Y1
-            TextField(
-              controller: _y1Controller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  labelText: 'Nhập chỉ số Y1 (điện tiêu dùng)'),
-            ),
-            // TextField để nhập chỉ số điện sản xuất X2
-            TextField(
-              controller: _x2Controller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  labelText: 'Nhập chỉ số X2 (điện sản xuất)'),
-            ),
-            // TextField để nhập chỉ số điện sản xuất Y2
-            TextField(
-              controller: _y2Controller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  labelText: 'Nhập chỉ số Y2 (điện sản xuất)'),
-            ),
-            // TextField để nhập chỉ số điện kinh doanh X3
-            TextField(
-              controller: _x3Controller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  labelText: 'Nhập chỉ số X3 (điện kinh doanh)'),
-            ),
-            // TextField để nhập chỉ số điện kinh doanh Y3
-            TextField(
-              controller: _y3Controller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  labelText: 'Nhập chỉ số Y3 (điện kinh doanh)'),
-            ),
-            // TextField để nhập giá A1 (điện tiêu dùng)
-            TextField(
-              controller: _a1Controller,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Nhập giá A1 (tiêu dùng)'),
-            ),
-            // TextField để nhập giá B1 (điện tiêu dùng)
-            TextField(
-              controller: _b1Controller,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Nhập giá B1 (tiêu dùng)'),
-            ),
-            // TextField để nhập giá C1 (điện tiêu dùng)
-            TextField(
-              controller: _c1Controller,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Nhập giá C1 (tiêu dùng)'),
-            ),
-            // TextField để nhập giá A2 (điện sản xuất)
-            TextField(
-              controller: _a2Controller,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Nhập giá A2 (sản xuất)'),
-            ),
-            // TextField để nhập giá B2 (điện sản xuất)
-            TextField(
-              controller: _b2Controller,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Nhập giá B2 (sản xuất)'),
-            ),
-            // TextField để nhập giá C2 (điện sản xuất)
-            TextField(
-              controller: _c2Controller,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Nhập giá C2 (sản xuất)'),
-            ),
-            // TextField để nhập giá A3 (điện kinh doanh)
-            TextField(
-              controller: _a3Controller,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Nhập giá A3 (kinh doanh)'),
-            ),
-            // TextField để nhập giá B3 (điện kinh doanh)
-            TextField(
-              controller: _b3Controller,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Nhập giá B3 (kinh doanh)'),
-            ),
-            // TextField để nhập giá C3 (điện kinh doanh)
-            TextField(
-              controller: _c3Controller,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(labelText: 'Nhập giá C3 (kinh doanh)'),
-            ),
-            // Nút bấm để tính toán và hiển thị kết quả
-            ElevatedButton(
-              child: const Text('Tính tiền điện'),
-              onPressed: () {
-                // Lấy dữ liệu từ các TextEditingController và chuyển đổi sang số nguyên
-                int x1 = int.tryParse(_x1Controller.text) ?? 0;
-                int y1 = int.tryParse(_y1Controller.text) ?? 0;
-                int x2 = int.tryParse(_x2Controller.text) ?? 0;
-                int y2 = int.tryParse(_y2Controller.text) ?? 0;
-                int x3 = int.tryParse(_x3Controller.text) ?? 0;
-                int y3 = int.tryParse(_y3Controller.text) ?? 0;
-                int a1 = int.tryParse(_a1Controller.text) ?? 0;
-                int b1 = int.tryParse(_b1Controller.text) ?? 0;
-                int c1 = int.tryParse(_c1Controller.text) ?? 0;
-                int a2 = int.tryParse(_a2Controller.text) ?? 0;
-                int b2 = int.tryParse(_b2Controller.text) ?? 0;
-                int c2 = int.tryParse(_c2Controller.text) ?? 0;
-                int a3 = int.tryParse(_a3Controller.text) ?? 0;
-                int b3 = int.tryParse(_b3Controller.text) ?? 0;
-                int c3 = int.tryParse(_c3Controller.text) ?? 0;
-
-                // Tính tổng số tiền điện và hiển thị kết quả
-                int totalAmount = calculateElectricityBill(
-                    x1, y1, x2, y2, x3, y3, a1, b1, c1, a2, b2, c2, a3, b3, c3);
-                _showResult(context, totalAmount);
-              },
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // Sử dụng vòng lặp for để tạo các TextField
+              for (var field in controllers)
+                TextField(
+                  controller: field['controller']!,
+                  decoration: InputDecoration(
+                    labelText: field['label'],
+                  ),
+                ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                  onPressed: calculateCost, child: const Text('Calculate')),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
