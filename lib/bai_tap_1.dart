@@ -99,23 +99,57 @@ class _BaiTap01State extends State<BaiTap01> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Số giải mã'),
+        title: const Text('Giải mã số'),
+        backgroundColor: Colors.blueAccent, // Thay đổi màu nền của AppBar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              'Nhập số được mã hóa:',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
             TextField(
               controller: _numberController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: 'Nhập số được mã hóa n',
+                border:
+                    OutlineInputBorder(), // Thay đổi kiểu viền của TextField
+                labelText: 'Số được mã hóa',
+                prefixIcon: Icon(
+                    Icons.lock), // Thêm biểu tượng vào bên trái của TextField
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 15, horizontal: 10), // Thay đổi padding nội dung
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _decodeInput,
-              child: const Text('Decode'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blueAccent, // Màu văn bản của nút
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 24.0), // Khoảng cách bên trong nút
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(12.0), // Bo tròn các góc của nút
+                ),
+                elevation: 5, // Độ cao bóng đổ của nút
+              ),
+              child: const Text(
+                'Giải mã',
+                style: TextStyle(
+                  fontSize: 18, // Kích thước chữ
+                  fontWeight: FontWeight.bold, // Độ đậm của chữ
+                ),
+              ),
             ),
           ],
         ),

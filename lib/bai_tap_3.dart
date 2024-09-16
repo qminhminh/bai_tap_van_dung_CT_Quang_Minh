@@ -206,29 +206,48 @@ class _BaiTap03State extends State<BaiTap03> {
     // Xây dựng giao diện người dùng của widget.
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tìm số lớn thứ hai'), // Tiêu đề trên thanh app bar.
+        title: const Text('Tìm số lớn thứ hai'),
+        backgroundColor: Colors.teal, // Màu nền của app bar.
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0), // Khoảng cách xung quanh nội dung.
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment
+              .stretch, // Để các widget mở rộng hết chiều ngang.
           children: [
-            // TextField cho phép người dùng nhập dãy số.
             TextField(
-              controller:
-                  _numbersController, // Controller để quản lý dữ liệu nhập vào.
-              keyboardType: TextInputType.number, // Định dạng bàn phím số.
-              decoration: const InputDecoration(
-                labelText:
-                    'Nhập các số được phân tách bằng dấu phẩy', // Nhãn cho trường nhập liệu.
-                border: OutlineInputBorder(), // Viền cho trường nhập liệu.
+              controller: _numbersController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Nhập các số được phân tách bằng dấu phẩy',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0), // Bo góc viền.
+                ),
+                prefixIcon: const Icon(
+                    Icons.numbers), // Biểu tượng cho trường nhập liệu.
+                filled: true, // Nền màu cho trường nhập liệu.
+                fillColor: Colors.grey[200], // Màu nền cho trường nhập liệu.
+              ),
+              style: const TextStyle(
+                fontSize: 18, // Kích thước chữ trong TextField.
+                color: Colors.black87, // Màu chữ trong TextField.
               ),
             ),
-            const SizedBox(height: 16.0), // Khoảng cách giữa các thành phần.
-            // Nút bấm để xử lý khi người dùng nhập số xong.
+            const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed:
-                  _processNumbers, // Gọi phương thức xử lý khi nhấn nút bấm.
-              child: const Text('Tìm và xử lý số lớn thứ hai'), // Nhãn nút.
+              onPressed: _processNumbers,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal, // Màu nền của nút.
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0), // Bo góc nút.
+                ),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0), // Padding cho nút.
+              ),
+              child: const Text(
+                'Tìm và xử lý số lớn thứ hai',
+                style: TextStyle(fontSize: 16), // Kích thước chữ trên nút.
+              ),
             ),
           ],
         ),

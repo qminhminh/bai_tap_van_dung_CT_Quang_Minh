@@ -87,10 +87,12 @@ class _BaiTap07State extends State<BaiTap07> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tính số chia hết cho 3'),
+        backgroundColor: Colors.teal,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: _controller,
@@ -98,12 +100,31 @@ class _BaiTap07State extends State<BaiTap07> {
               decoration: const InputDecoration(
                 labelText: "Nhập số nguyên n",
                 border: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.teal, width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                ),
+                prefixIcon: Icon(Icons.input, color: Colors.teal),
               ),
+              style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: calculateDivisible, // Nút để tính toán
-              child: const Text("Tính toán"),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.teal, // Màu chữ của nút
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0), // Bo góc nút
+                ),
+              ),
+              child: const Text(
+                "Tính toán",
+                style: TextStyle(fontSize: 18),
+              ),
             ),
           ],
         ),

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 
@@ -103,35 +103,53 @@ class _BaiTap05State extends State<BaiTap05> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Xếp phòng thi'), // Tiêu đề của thanh AppBar
+        title: const Text('Xếp phòng thi',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0), // Padding xung quanh các widget
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller:
-                  _nController, // Controller để lấy dữ liệu số lượng cuộc thi
-              decoration: const InputDecoration(
-                  labelText:
-                      'Nhập số lượng cuộc thi (N)'), // Nhãn cho ô nhập liệu
-              keyboardType:
-                  TextInputType.number, // Bàn phím chỉ cho phép nhập số
+              controller: _nController,
+              decoration: InputDecoration(
+                labelText: 'Nhập số lượng cuộc thi (N)',
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.numbers),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
+              keyboardType: TextInputType.number,
+              style: const TextStyle(fontSize: 16),
             ),
+            const SizedBox(height: 16), // Khoảng cách giữa các widget
             TextField(
-              controller:
-                  _examsController, // Controller để lấy dữ liệu thời gian cuộc thi
-              decoration: const InputDecoration(
-                  labelText:
-                      'Nhập thời gian bắt đầu và kết thúc cho từng cuộc thi Vd: 1,2 xuống dòng 2,3'), // Nhãn cho ô nhập liệu
+              controller: _examsController,
+              decoration: InputDecoration(
+                labelText:
+                    'Nhập thời gian bắt đầu và kết thúc cho từng cuộc thi\nVD: 1,2\n2,3',
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.schedule),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
               maxLines: null, // Cho phép nhiều dòng nhập liệu
-              keyboardType:
-                  TextInputType.multiline, // Bàn phím cho phép nhập nhiều dòng
+              keyboardType: TextInputType.multiline,
+              style: const TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 20), // Khoảng cách giữa các widget
+            const SizedBox(height: 24), // Khoảng cách giữa các widget
             ElevatedButton(
               onPressed: _calculate, // Hàm gọi khi nhấn nút
-              child: const Text('Tính số phòng'), // Nội dung của nút
+              child:
+                  const Text('Tính số phòng', style: TextStyle(fontSize: 16)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent, // Màu nền của nút
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 32.0), // Padding bên trong nút
+                textStyle: const TextStyle(fontSize: 16),
+              ),
             ),
           ],
         ),

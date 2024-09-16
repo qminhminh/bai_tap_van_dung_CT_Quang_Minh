@@ -62,32 +62,55 @@ class _BaiTap04State extends State<BaiTap04> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tính độ lệch giao thông'),
+        backgroundColor: Colors.teal, // Thay đổi màu nền của AppBar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextField(
-              controller: _nController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Nhập số n (số đoạn đường)',
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextField(
+                controller: _nController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Nhập số n (số đoạn đường)',
+                  border: const OutlineInputBorder(), // Đường viền cho ô nhập
+                  prefixIcon: const Icon(Icons.numbers,
+                      color: Colors.teal), // Biểu tượng bên trái
+                  filled: true, // Màu nền cho ô nhập
+                  fillColor: Colors.grey[200], // Màu nền
+                ),
+                style: const TextStyle(
+                    fontSize: 16), // Kích thước chữ trong ô nhập
               ),
-            ),
-            TextField(
-              controller: _dataController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Nhập khoảng cách giữa các đoạn (d1, d2, ..., dn)',
+              const SizedBox(height: 20),
+              TextField(
+                controller: _dataController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Nhập khoảng cách giữa các đoạn (d1, d2, ..., dn)',
+                  border: const OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.list, color: Colors.teal),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                ),
+                style: const TextStyle(fontSize: 16),
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _processData,
-              child: const Text('Tính độ lệch'),
-            ),
-          ],
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _processData,
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.teal, // Màu nền của nút
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15, horizontal: 20), // Padding cho nút
+                  textStyle: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold), // Kiểu chữ
+                ),
+                child: const Text('Tính độ lệch'),
+              ),
+            ],
+          ),
         ),
       ),
     );

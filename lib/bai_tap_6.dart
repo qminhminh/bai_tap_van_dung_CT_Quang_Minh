@@ -1,4 +1,4 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: curly_braces_in_flow_control_structures, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 
@@ -95,36 +95,60 @@ class _BaiTap06State extends State<BaiTap06> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tìm biển số đẹp'), // Tiêu đề trên thanh AppBar
+        title: const Text('Tìm biển số đẹp'),
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0), // Padding cho giao diện chính
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // TextField để nhập giá trị A
             TextField(
-              controller:
-                  _aController, // Liên kết với controller để lấy giá trị A
-              keyboardType: TextInputType.number, // Chỉ cho phép nhập số
-              decoration: const InputDecoration(
-                labelText: 'Nhập số A', // Nhãn cho ô nhập
+              controller: _aController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Nhập số A',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                prefixIcon: const Icon(Icons.numbers),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               ),
+              style: const TextStyle(fontSize: 16),
             ),
+            const SizedBox(height: 16),
             // TextField để nhập giá trị B
             TextField(
-              controller:
-                  _bController, // Liên kết với controller để lấy giá trị B
-              keyboardType: TextInputType.number, // Chỉ cho phép nhập số
-              decoration: const InputDecoration(
-                labelText: 'Nhập số B', // Nhãn cho ô nhập
+              controller: _bController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Nhập số B',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                prefixIcon: const Icon(Icons.numbers),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               ),
+              style: const TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 20), // Khoảng cách giữa các ô nhập và nút
+            const SizedBox(height: 20),
             // Nút bấm để bắt đầu tìm kiếm biển số đẹp
             ElevatedButton(
-              onPressed:
-                  findBeautifulLicensePlates, // Gọi hàm tìm biển số đẹp khi nhấn nút
-              child: const Text('Tìm biển số đẹp'), // Nội dung nút
+              onPressed: findBeautifulLicensePlates,
+              child: const Text('Tìm biển số đẹp'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blueAccent,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                textStyle:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             ),
           ],
         ),

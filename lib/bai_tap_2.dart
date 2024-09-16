@@ -87,36 +87,60 @@ class _BaiTap02State extends State<BaiTap02> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Số Chẵn Chia Hết Cho 3'),
+        backgroundColor: Colors.blueAccent, // Thay đổi màu nền của AppBar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // TextField để nhập giá trị a
             TextField(
               controller: _aController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 labelText: 'Nhập giá trị a',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons
+                    .numbers), // Thêm biểu tượng vào bên trái của TextField
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 15, horizontal: 10), // Thay đổi padding nội dung
               ),
             ),
             const SizedBox(height: 16),
-            // TextField để nhập giá trị b
             TextField(
               controller: _bController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 labelText: 'Nhập giá trị b',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons
+                    .numbers), // Thêm biểu tượng vào bên trái của TextField
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 15, horizontal: 10), // Thay đổi padding nội dung
               ),
             ),
             const SizedBox(height: 16),
-            // Nút để thực hiện tính toán
             ElevatedButton(
               onPressed: _calculate,
-              child: const Text('Tính Toán'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blueAccent, // Màu văn bản của nút
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 24.0), // Khoảng cách bên trong nút
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(12.0), // Bo tròn các góc của nút
+                ),
+                elevation: 5, // Độ cao bóng đổ của nút
+              ),
+              child: const Text(
+                'Tính Toán',
+                style: TextStyle(
+                  fontSize: 18, // Kích thước chữ
+                  fontWeight: FontWeight.bold, // Độ đậm của chữ
+                ),
+              ),
             ),
           ],
         ),

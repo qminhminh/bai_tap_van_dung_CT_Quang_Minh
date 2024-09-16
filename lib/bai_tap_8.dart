@@ -150,26 +150,54 @@ class _BaiTap08State extends State<BaiTap08> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('BaiTap08'),
+        backgroundColor: Colors.blueAccent, // Màu nền của AppBar
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              // Sử dụng vòng lặp for để tạo các TextField
-              for (var field in controllers)
-                TextField(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Sử dụng vòng lặp for để tạo các TextField
+            for (var field in controllers)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: TextField(
                   controller: field['controller']!,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: field['label'],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0), // Bo góc viền
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 16.0),
+                    filled: true,
+                    fillColor: Colors.grey[200], // Màu nền của ô nhập
+                  ),
+                  style:
+                      const TextStyle(fontSize: 16.0), // Kích thước phông chữ
+                ),
+              ),
+            const SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: calculateCost,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent, // Màu nền của nút
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 12.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0), // Bo góc nút
                   ),
                 ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                  onPressed: calculateCost, child: const Text('Calculate')),
-              const SizedBox(height: 20),
-            ],
-          ),
+                child: const Text(
+                  'Calculate',
+                  style: TextStyle(fontSize: 18.0), // Kích thước phông chữ
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
         ),
       ),
     );
