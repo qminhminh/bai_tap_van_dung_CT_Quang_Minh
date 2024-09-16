@@ -33,7 +33,7 @@ class _BaiTap02State extends State<BaiTap02> {
     final int? a = int.tryParse(_aController.text);
     final int? b = int.tryParse(_bController.text);
 
-    if (a == null || b == null || a > b || a > 10 ^ 15 || b > 10 ^ 15) {
+    if (a == null || b == null) {
       // Hiển thị thông báo lỗi nếu a hoặc b không hợp lệ
       _showDialog('Vui lòng nhập các giá trị hợp lệ.');
       return;

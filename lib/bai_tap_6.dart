@@ -42,36 +42,33 @@ class _BaiTap06State extends State<BaiTap06> {
         0; // Lấy giá trị B từ ô nhập, mặc định 0 nếu không hợp lệ
 
     beautifulNumbers.clear(); // Xóa danh sách cũ (nếu có)
-    if (a < 10 ^ 4 || a >= b || b >= 10 ^ 5) {
-      _showErrorDialog('Vui lòng nhập giá trị A và B hợp lệ');
-    } else {
-      // Duyệt qua tất cả các số từ A đến B
-      for (int i = a; i <= b; i++) {
-        if (_isPrime(i) && _isPalindrome(i)) {
-          beautifulNumbers.add(
-              i); // Nếu số i vừa là số nguyên tố, vừa là số đối xứng thì thêm vào danh sách
-        }
-      }
 
-      // Hiển thị kết quả trong một popup
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Kết quả'), // Tiêu đề popup
-          content: Text(
-              'Số lượng biển số xe đẹp: ${beautifulNumbers.length}\nBiển số xe đẹp: ${beautifulNumbers.join(', ')}'),
-          // Nội dung popup gồm số lượng và danh sách biển số xe đẹp
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Đóng popup khi nhấn OK
-              },
-              child: const Text('OK'), // Nút OK
-            ),
-          ],
-        ),
-      );
+    // Duyệt qua tất cả các số từ A đến B
+    for (int i = a; i <= b; i++) {
+      if (_isPrime(i) && _isPalindrome(i)) {
+        beautifulNumbers.add(
+            i); // Nếu số i vừa là số nguyên tố, vừa là số đối xứng thì thêm vào danh sách
+      }
     }
+
+    // Hiển thị kết quả trong một popup
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Kết quả'), // Tiêu đề popup
+        content: Text(
+            'Số lượng biển số xe đẹp: ${beautifulNumbers.length}\nBiển số xe đẹp: ${beautifulNumbers.join(', ')}'),
+        // Nội dung popup gồm số lượng và danh sách biển số xe đẹp
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Đóng popup khi nhấn OK
+            },
+            child: const Text('OK'), // Nút OK
+          ),
+        ],
+      ),
+    );
   }
 
   void _showErrorDialog(String message) {

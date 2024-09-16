@@ -43,26 +43,18 @@ class _BaiTap04State extends State<BaiTap04> {
         .map((e) => int.tryParse(e) ?? 0)
         .toList();
 
-    if (n <= 1 ||
-        distances.length != n ||
-        n > 106 ||
-        distances.any((number) => number > 109 || number < 1)) {
-      _showResult('Dữ liệu không hợp lệ');
-      return;
-    } else {
-      // Sắp xếp dãy số
-      distances.sort();
+    // Sắp xếp dãy số
+    distances.sort();
 
-      // Tìm độ lệch nhỏ nhất giữa các phần tử liên tiếp
-      int mins = distances[1] - distances[0];
-      for (int i = 1; i < n - 1; i++) {
-        int diff = distances[i + 1] - distances[i];
-        mins = min(mins, diff);
-      }
-
-      // Hiển thị kết quả trong popup
-      _showResult('Độ lệch nhỏ nhất: $mins');
+    // Tìm độ lệch nhỏ nhất giữa các phần tử liên tiếp
+    int mins = distances[1] - distances[0];
+    for (int i = 1; i < n - 1; i++) {
+      int diff = distances[i + 1] - distances[i];
+      mins = min(mins, diff);
     }
+
+    // Hiển thị kết quả trong popup
+    _showResult('Độ lệch nhỏ nhất: $mins');
   }
 
   @override
