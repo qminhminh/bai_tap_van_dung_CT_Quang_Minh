@@ -117,71 +117,82 @@ class _BaiTap05State extends State<BaiTap05> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0), // Padding xung quanh các widget
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _nController,
-                    decoration: InputDecoration(
-                      labelText: 'Nhập số lượng cuộc thi (N)',
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(Icons.numbers),
-                      filled: true,
-                      fillColor: Colors.grey[200],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _nController,
+                      decoration: const InputDecoration(
+                        labelText: 'Nhập số lượng cuộc thi (N)',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.numbers),
+                        filled: true,
+                        fillColor: Color.fromARGB(255, 104, 179, 197),
+                      ),
+                      keyboardType: TextInputType.number,
+                      style: const TextStyle(
+                        fontSize: 18, // Kích thước chữ trong TextField.
+                        color: Color.fromARGB(
+                            255, 0, 0, 0), // Màu chữ trong TextField.
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Vui lòng nhập số';
+                        }
+                        return null;
+                      },
                     ),
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(fontSize: 16),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Vui lòng nhập số';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16), // Khoảng cách giữa các widget
-                  TextFormField(
-                    controller: _examsController,
-                    decoration: InputDecoration(
-                      labelText:
-                          'Nhập thời gian bắt đầu và kết thúc cho từng cuộc thi\nVD: 1,2\n2,3',
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(Icons.schedule),
-                      filled: true,
-                      fillColor: Colors.grey[200],
+                    const SizedBox(height: 16), // Khoảng cách giữa các widget
+                    TextFormField(
+                      controller: _examsController,
+                      decoration: const InputDecoration(
+                        labelText:
+                            'Nhập thời gian bắt đầu và kết thúc cho từng cuộc thi\nVD: 1,2\n2,3',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.schedule),
+                        filled: true,
+                        fillColor: Color.fromARGB(255, 104, 179, 197),
+                      ),
+                      maxLines: null, // Cho phép nhiều dòng nhập liệu
+                      keyboardType: TextInputType.multiline,
+                      style: const TextStyle(
+                        fontSize: 18, // Kích thước chữ trong TextField.
+                        color: Color.fromARGB(
+                            255, 0, 0, 0), // Màu chữ trong TextField.
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Vui lòng nhập số';
+                        }
+                        return null;
+                      },
                     ),
-                    maxLines: null, // Cho phép nhiều dòng nhập liệu
-                    keyboardType: TextInputType.multiline,
-                    style: const TextStyle(fontSize: 16),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Vui lòng nhập số';
-                      }
-                      return null;
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 24), // Khoảng cách giữa các widget
-            ElevatedButton(
-              autofocus: false,
-              clipBehavior: Clip.antiAlias,
-              focusNode: FocusNode(),
-              onPressed: _calculate, // Hàm gọi khi nhấn nút
-              child:
-                  const Text('Tính số phòng', style: TextStyle(fontSize: 16)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent, // Màu nền của nút
-                padding: const EdgeInsets.symmetric(
-                    vertical: 16.0, horizontal: 32.0), // Padding bên trong nút
-                textStyle: const TextStyle(fontSize: 16),
+              const SizedBox(height: 24), // Khoảng cách giữa các widget
+              ElevatedButton(
+                autofocus: false,
+                clipBehavior: Clip.antiAlias,
+                focusNode: FocusNode(),
+                onPressed: _calculate, // Hàm gọi khi nhấn nút
+                child:
+                    const Text('Tính số phòng', style: TextStyle(fontSize: 16)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent, // Màu nền của nút
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0,
+                      horizontal: 32.0), // Padding bên trong nút
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

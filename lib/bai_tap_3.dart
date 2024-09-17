@@ -220,57 +220,61 @@ class _BaiTap03State extends State<BaiTap03> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment
-              .stretch, // Để các widget mở rộng hết chiều ngang.
-          children: [
-            Form(
-              key: _formKey, // Key để xác thực form.
-              child: TextFormField(
-                controller: _numbersController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Nhập các số được phân tách bằng dấu phẩy',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0), // Bo góc viền.
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment
+                .stretch, // Để các widget mở rộng hết chiều ngang.
+            children: [
+              Form(
+                key: _formKey, // Key để xác thực form.
+                child: TextFormField(
+                  controller: _numbersController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Nhập các số được phân tách bằng dấu phẩy',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0), // Bo góc viền.
+                    ),
+                    prefixIcon: const Icon(
+                        Icons.numbers), // Biểu tượng cho trường nhập liệu.
+                    filled: true, // Nền màu cho trường nhập liệu.
+                    fillColor: const Color.fromARGB(
+                        255, 104, 179, 197), // Màu nền cho trường nhập liệu.
                   ),
-                  prefixIcon: const Icon(
-                      Icons.numbers), // Biểu tượng cho trường nhập liệu.
-                  filled: true, // Nền màu cho trường nhập liệu.
-                  fillColor: Colors.grey[200], // Màu nền cho trường nhập liệu.
+                  style: const TextStyle(
+                    fontSize: 18, // Kích thước chữ trong TextField.
+                    color: Color.fromARGB(
+                        255, 12, 12, 12), // Màu chữ trong TextField.
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Vui lòng nhập số';
+                    }
+                    return null;
+                  },
                 ),
-                style: const TextStyle(
-                  fontSize: 18, // Kích thước chữ trong TextField.
-                  color: Colors.black87, // Màu chữ trong TextField.
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                autofocus: false,
+                focusNode: FocusNode(),
+                clipBehavior: Clip.antiAlias,
+                onPressed: _processNumbers,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal, // Màu nền của nút.
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0), // Bo góc nút.
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0), // Padding cho nút.
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Vui lòng nhập số';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              autofocus: false,
-              focusNode: FocusNode(),
-              clipBehavior: Clip.antiAlias,
-              onPressed: _processNumbers,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal, // Màu nền của nút.
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0), // Bo góc nút.
+                child: const Text(
+                  'Tìm và xử lý số lớn thứ hai',
+                  style: TextStyle(fontSize: 16), // Kích thước chữ trên nút.
                 ),
-                padding: const EdgeInsets.symmetric(
-                    vertical: 16.0), // Padding cho nút.
               ),
-              child: const Text(
-                'Tìm và xử lý số lớn thứ hai',
-                style: TextStyle(fontSize: 16), // Kích thước chữ trên nút.
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

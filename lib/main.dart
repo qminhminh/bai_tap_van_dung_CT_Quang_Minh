@@ -67,14 +67,14 @@ class _HomeScreenState extends State<HomeScreen>
   ];
 
   final List<String> _pageLabels = [
-    'Bài tập 1',
-    'Bài tập 2',
-    'Bài tập 3',
-    'Bài tập 4',
-    'Bài tập 5',
-    'Bài tập 6',
-    'Bài tập 7',
-    'Bài tập 8',
+    'B1',
+    'B2',
+    'B3',
+    'B4',
+    'B5',
+    'B6',
+    'B7',
+    'B8',
   ];
 
   @override
@@ -114,8 +114,6 @@ class _HomeScreenState extends State<HomeScreen>
             ],
             bottom: TabBar(
               controller: _tabController,
-              labelStyle:
-                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               labelColor: Colors.red,
               tabs: _pageLabels.map((label) => Tab(text: label)).toList(),
             ),
@@ -160,33 +158,10 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             ),
           ),
-          body: (orientation == Orientation.portrait)
-              ? TabBarView(
-                  controller: _tabController,
-                  children: _pages,
-                )
-              : Row(
-                  children: [
-                    Expanded(
-                      child: Drawer(
-                        child: ListView(
-                          children: _pageLabels.map((label) {
-                            return ListTile(
-                              title: Text(label),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: _pages,
-                      ),
-                    ),
-                  ],
-                ),
+          body: TabBarView(
+            controller: _tabController,
+            children: _pages,
+          ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: (index) {

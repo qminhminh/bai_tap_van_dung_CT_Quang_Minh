@@ -1,4 +1,4 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: curly_braces_in_flow_control_structures, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 
@@ -15,45 +15,59 @@ class _BaiTap06State extends State<BaiTap06> {
   List<int> beautifulNumbers = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // Hàm kiểm tra một số có phải là số nguyên tố hay không
+  // Hàm kiểm tra số nguyên tố
   bool _isPrime(int n) {
-    if (n < 2) return false; // Các số nhỏ hơn 2 không phải là số nguyên tố
+    // Nếu số nhỏ hơn 2, không phải là số nguyên tố
+    if (n < 2) return false;
+
+    // Kiểm tra tính chia hết của số từ 2 đến căn bậc hai của n
     for (int i = 2; i * i <= n; i++) {
-      // Kiểm tra tính chia hết từ 2 đến căn bậc hai của n
-      if (n % i == 0)
-        return false; // Nếu n chia hết cho i, thì n không phải là số nguyên tố
+      // Nếu n chia hết cho i, thì n không phải là số nguyên tố
+      if (n % i == 0) return false;
     }
-    return true; // Nếu không tìm thấy số nào chia hết, thì n là số nguyên tố
+
+    // Nếu không tìm thấy số nào chia hết, thì n là số nguyên tố
+    return true;
   }
 
-// Hàm kiểm tra một số có phải là số đối xứng (Palindrome) hay không
+// Hàm kiểm tra số đối xứng (palindrome)
   bool _isPalindrome(int n) {
-    String str = n.toString(); // Chuyển số thành chuỗi
-    String reversedStr = str.split('').reversed.join(''); // Đảo ngược chuỗi
-    return str ==
-        reversedStr; // So sánh chuỗi gốc với chuỗi đảo ngược; nếu giống nhau thì là số đối xứng
+    // Chuyển số thành chuỗi
+    String str = n.toString();
+
+    // Đảo ngược chuỗi
+    String reversedStr = str.split('').reversed.join('');
+
+    // So sánh chuỗi gốc với chuỗi đảo ngược
+    // Nếu giống nhau, thì số là số đối xứng
+    return str == reversedStr;
   }
 
-// Hàm tìm các biển số xe đẹp
+// Hàm tìm các số biển số đẹp
   void findBeautifulLicensePlates() {
+    // Kiểm tra tính hợp lệ của các trường nhập liệu
     if (_formKey.currentState?.validate() ?? false) {
-      int a = int.tryParse(_aController.text) ??
-          0; // Lấy giá trị A từ ô nhập, nếu không hợp lệ thì mặc định là 0
-      int b = int.tryParse(_bController.text) ??
-          0; // Lấy giá trị B từ ô nhập, nếu không hợp lệ thì mặc định là 0
+      // Lấy giá trị A từ ô nhập, nếu không hợp lệ thì mặc định là 0
+      int a = int.tryParse(_aController.text) ?? 0;
 
-      beautifulNumbers.clear(); // Xóa danh sách các số đẹp hiện tại
+      // Lấy giá trị B từ ô nhập, nếu không hợp lệ thì mặc định là 0
+      int b = int.tryParse(_bController.text) ?? 0;
 
+      // Xóa danh sách các số đẹp hiện tại
+      beautifulNumbers.clear();
+
+      // Duyệt qua tất cả các số từ A đến B
       for (int i = a; i <= b; i++) {
-        // Duyệt qua tất cả các số từ A đến B
+        // Kiểm tra xem số i có phải là số nguyên tố và số đối xứng không
         if (_isPrime(i) && _isPalindrome(i)) {
-          // Kiểm tra xem số i có phải là số nguyên tố và số đối xứng không
-          beautifulNumbers.add(i); // Nếu có, thêm vào danh sách các số đẹp
+          // Nếu có, thêm vào danh sách các số đẹp
+          beautifulNumbers.add(i);
         }
       }
 
+      // Cập nhật lại giao diện để hiển thị danh sách các số đẹp mới
       setState(() {});
-    } // Cập nhật lại giao diện để hiển thị danh sách các số đẹp mới
+    }
   }
 
   @override
@@ -73,6 +87,7 @@ class _BaiTap06State extends State<BaiTap06> {
                   Form(
                     key: _formKey,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TextFormField(
                           controller: _aController,
@@ -115,26 +130,22 @@ class _BaiTap06State extends State<BaiTap06> {
                             return null;
                           },
                         ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: findBeautifulLicensePlates,
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.blueAccent,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            textStyle: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text('Tìm biển số đẹp'),
+                        ),
                       ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    autofocus: false,
-                    clipBehavior: Clip.antiAlias,
-                    focusNode: FocusNode(),
-                    onPressed: findBeautifulLicensePlates,
-                    // ignore: sort_child_properties_last
-                    child: const Text('Tìm biển số đẹp'),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.blueAccent,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      textStyle: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
                     ),
                   ),
                 ],
@@ -172,8 +183,8 @@ class _BaiTap06State extends State<BaiTap06> {
                 childCount: beautifulNumbers.length,
               ),
             ),
-            const SliverPadding(
-              padding: EdgeInsets.all(16.0),
+            SliverPadding(
+              padding: const EdgeInsets.all(16.0),
               sliver: SliverToBoxAdapter(
                 child: Text(
                   'Danh sách biển số đẹp (GridView) có thể kéo trái phải để xóa',

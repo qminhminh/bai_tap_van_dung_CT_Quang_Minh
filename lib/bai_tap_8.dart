@@ -175,10 +175,14 @@ class _BaiTap08State extends State<BaiTap08> {
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 16.0),
                     filled: true,
-                    fillColor: Colors.grey[200], // Màu nền của ô nhập
+                    fillColor: const Color.fromARGB(
+                        255, 104, 179, 197), // Màu nền của ô nhập
                   ),
-                  style:
-                      const TextStyle(fontSize: 16.0), // Kích thước phông chữ
+                  style: const TextStyle(
+                    fontSize: 18, // Kích thước chữ trong TextField.
+                    color: Color.fromARGB(
+                        255, 0, 0, 0), // Màu chữ trong TextField.
+                  ), // Kích thước phông chữ
                 ),
               ),
             const SizedBox(height: 20),
