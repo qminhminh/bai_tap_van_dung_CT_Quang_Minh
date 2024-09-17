@@ -8,57 +8,47 @@ class BaiTap02 extends StatefulWidget {
 }
 
 class _BaiTap02State extends State<BaiTap02> {
+  final _formKey = GlobalKey<FormState>();
+
   // Controllers để nhận giá trị từ các TextField
   final TextEditingController _aController = TextEditingController();
   final TextEditingController _bController = TextEditingController();
 
   // Hàm tính số lượng số chẵn chia hết cho 3 từ 1 đến n
   int countEvenDivisible(int n) {
-    if (n < 6) return 0; // Nếu n nhỏ hơn 6 thì không có số chẵn chia hết cho 3
-    return n ~/ 6; // Chia n cho 6 để tìm số lượng số chẵn chia hết cho 3
+    if (n < 6) return 0;
+    return n ~/ 6;
   }
 
   // Hàm tính tổng các số chẵn chia hết cho 3 từ 1 đến n
   int sumEvenDivisibleBy3(int n) {
-    if (n < 6) return 0; // Nếu n nhỏ hơn 6 thì không có số chẵn chia hết cho 3
+    if (n < 6) return 0;
     int count = countEvenDivisible(n);
-    return 6 *
-        count *
-        (count + 1) ~/
-        2; // Công thức tổng của các số chẵn chia hết cho 3
+    return 6 * count * (count + 1) ~/ 2;
   }
 
   // Hàm xử lý tính toán và hiển thị kết quả
   void _calculate() {
-    final int? a = int.tryParse(_aController.text);
-    final int? b = int.tryParse(_bController.text);
+    if (_formKey.currentState!.validate()) {
+      final int a = int.parse(_aController.text);
+      final int b = int.parse(_bController.text);
 
-    if (a == null || b == null) {
-      // Hiển thị thông báo lỗi nếu a hoặc b không hợp lệ
-      _showResultDialog('Vui lòng nhập các giá trị hợp lệ.');
-      return;
-    }
+      int countB = countEvenDivisible(b);
+      int sumB = sumEvenDivisibleBy3(b);
 
-    // Tính số lượng và tổng từ 1 đến b
-    int countB = countEvenDivisible(b);
-    int sumB = sumEvenDivisibleBy3(b);
+      int countA = countEvenDivisible(a - 1);
+      int sumA = sumEvenDivisibleBy3(a - 1);
 
-    // Tính số lượng và tổng từ 1 đến a-1
-    int countA = countEvenDivisible(a - 1);
-    int sumA = sumEvenDivisibleBy3(a - 1);
+      int count = countB - countA;
+      int totalSum = sumB - sumA;
 
-    // Tính số lượng và tổng trong khoảng từ a đến b
-    int count = countB - countA;
-    int totalSum = sumB - sumA;
-
-    if (totalSum + a + b > 0) {
-      // Hiển thị kết quả nếu tổng lớn hơn 0
-      _showResultDialog(
-          'Số lượng số chẵn chia hết cho 3: $count\nTổng của chúng: $totalSum');
-    } else {
-      // Hiển thị thông báo nếu không có số chẵn nào chia hết cho 3
-      _showResultDialog(
-          'Không có số chẵn nào chia hết cho 3 trong đoạn [a, b].');
+      if (totalSum > 0) {
+        _showResultDialog(
+            'Số lượng số chẵn chia hết cho 3: $count\nTổng của chúng: $totalSum');
+      } else {
+        _showResultDialog(
+            'Không có số chẵn nào chia hết cho 3 trong đoạn [a, b].');
+      }
     }
   }
 
@@ -72,10 +62,8 @@ class _BaiTap02State extends State<BaiTap02> {
               style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
           content: Text(
             result,
-            style: TextStyle(
-                fontFamily: FontWeight.bold.toString(),
-                color: Colors.blue,
-                fontSize: 30),
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.blue, fontSize: 30),
           ),
           actions: <Widget>[
             TextButton(
@@ -98,62 +86,79 @@ class _BaiTap02State extends State<BaiTap02> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Số Chẵn Chia Hết Cho 3'),
-        backgroundColor: Colors.blueAccent, // Thay đổi màu nền của AppBar
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _aController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Nhập giá trị a',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons
-                    .numbers), // Thêm biểu tượng vào bên trái của TextField
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 15, horizontal: 10), // Thay đổi padding nội dung
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _bController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Nhập giá trị b',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons
-                    .numbers), // Thêm biểu tượng vào bên trái của TextField
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 15, horizontal: 10), // Thay đổi padding nội dung
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _calculate,
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blueAccent, // Màu văn bản của nút
-                padding: const EdgeInsets.symmetric(
-                    vertical: 16.0,
-                    horizontal: 24.0), // Khoảng cách bên trong nút
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(12.0), // Bo tròn các góc của nút
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextFormField(
+                controller: _aController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Nhập giá trị a',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.numbers),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 ),
-                elevation: 5, // Độ cao bóng đổ của nút
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập giá trị a';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'Giá trị a phải là số nguyên hợp lệ';
+                  }
+                  return null;
+                },
               ),
-              child: const Text(
-                'Tính Toán',
-                style: TextStyle(
-                  fontSize: 18, // Kích thước chữ
-                  fontWeight: FontWeight.bold, // Độ đậm của chữ
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _bController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Nhập giá trị b',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.numbers),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập giá trị b';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'Giá trị b phải là số nguyên hợp lệ';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _calculate,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 24.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  elevation: 5,
+                ),
+                child: const Text(
+                  'Tính Toán',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
