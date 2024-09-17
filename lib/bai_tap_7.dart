@@ -136,6 +136,9 @@ class _BaiTap07State extends State<BaiTap07> with TickerProviderStateMixin {
                 )),
             const SizedBox(height: 20),
             ElevatedButton(
+              autofocus: false,
+              clipBehavior: Clip.antiAlias,
+              focusNode: FocusNode(),
               onPressed: calculateDivisible, // Nút để tính toán
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,

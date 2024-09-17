@@ -168,6 +168,9 @@ class _BaiTap05State extends State<BaiTap05> {
             ),
             const SizedBox(height: 24), // Khoảng cách giữa các widget
             ElevatedButton(
+              autofocus: false,
+              clipBehavior: Clip.antiAlias,
+              focusNode: FocusNode(),
               onPressed: _calculate, // Hàm gọi khi nhấn nút
               child:
                   const Text('Tính số phòng', style: TextStyle(fontSize: 16)),

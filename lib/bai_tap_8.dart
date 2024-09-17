@@ -184,6 +184,9 @@ class _BaiTap08State extends State<BaiTap08> {
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
+                autofocus: false,
+                clipBehavior: Clip.antiAlias,
+                focusNode: FocusNode(),
                 onPressed: calculateCost,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent, // Màu nền của nút

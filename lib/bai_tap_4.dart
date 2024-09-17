@@ -125,6 +125,9 @@ class _BaiTap04State extends State<BaiTap04> {
               const SizedBox(height: 20),
               const SizedBox(height: 20),
               ElevatedButton(
+                clipBehavior: Clip.antiAlias,
+                autofocus: false,
+                focusNode: FocusNode(),
                 onPressed: _processData,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal, // Màu nền của nút

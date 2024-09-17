@@ -153,6 +153,9 @@ class _BaiTap02State extends State<BaiTap02> {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
+                      clipBehavior: Clip.antiAlias,
+                      focusNode: FocusNode(),
+                      autofocus: false,
                       onPressed: _calculate,
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,

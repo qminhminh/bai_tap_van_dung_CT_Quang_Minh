@@ -120,6 +120,9 @@ class _BaiTap06State extends State<BaiTap06> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
+                    autofocus: false,
+                    clipBehavior: Clip.antiAlias,
+                    focusNode: FocusNode(),
                     onPressed: findBeautifulLicensePlates,
                     // ignore: sort_child_properties_last
                     child: const Text('Tìm biển số đẹp'),
