@@ -176,12 +176,14 @@ class _BaiTap07State extends State<BaiTap07> with TickerProviderStateMixin {
                         return ScaleTransition(
                           scale: _animation,
                           child: ListTile(
-                            title: Text(
-                              '${divisible[index]}',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 30,
-                                fontFamily: FontWeight.bold.toString(),
+                            title: GestureDetector(
+                              child: Text(
+                                '${divisible[index]}',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 30,
+                                  fontFamily: FontWeight.bold.toString(),
+                                ),
                               ),
                             ),
                             leading: const Icon(Icons.numbers),
