@@ -96,86 +96,113 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Danh sách bài tập'),
-        actions: [
-          Switch(
-            value: _isDarkMode,
-            onChanged: (value) {
-              setState(() {
-                _isDarkMode = value;
-                MyApp.of(context)?.setThemeMode(_isDarkMode);
-              });
-            },
-          ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          labelStyle:
-              const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          labelColor: Colors.red,
-          tabs: _pageLabels.map((label) => Tab(text: label)).toList(),
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Danh sách bài tập'),
+            actions: [
+              Switch(
+                value: _isDarkMode,
+                onChanged: (value) {
+                  setState(() {
+                    _isDarkMode = value;
+                    MyApp.of(context)?.setThemeMode(_isDarkMode);
+                  });
+                },
               ),
-              child: Text(
-                'Bài Tập \n Ha Quang Minh',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
+            ],
+            bottom: TabBar(
+              controller: _tabController,
+              labelStyle:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              labelColor: Colors.red,
+              tabs: _pageLabels.map((label) => Tab(text: label)).toList(),
             ),
-            ...List.generate(_pageLabels.length, (index) {
-              return ListTile(
-                title: Text(
-                  _pageLabels[index],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 20,
+          ),
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                const DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  child: Text(
+                    'Bài Tập \n Ha Quang Minh',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
                   ),
                 ),
-                onTap: () {
-                  setState(() {
-                    _currentIndex = index;
-                    _tabController.index = _currentIndex;
-                  });
-                  Navigator.pop(context);
-                },
+                ...List.generate(_pageLabels.length, (index) {
+                  return ListTile(
+                    title: Text(
+                      _pageLabels[index],
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                        fontSize: 20,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        _currentIndex = index;
+                        _tabController.index = _currentIndex;
+                      });
+                      Navigator.pop(context);
+                    },
+                  );
+                }),
+              ],
+            ),
+          ),
+          body: (orientation == Orientation.portrait)
+              ? TabBarView(
+                  controller: _tabController,
+                  children: _pages,
+                )
+              : Row(
+                  children: [
+                    Expanded(
+                      child: Drawer(
+                        child: ListView(
+                          children: _pageLabels.map((label) {
+                            return ListTile(
+                              title: Text(label),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: _pages,
+                      ),
+                    ),
+                  ],
+                ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+                _tabController.index = _currentIndex;
+              });
+            },
+            items: List.generate(_pageLabels.length, (index) {
+              return BottomNavigationBarItem(
+                icon: const Icon(Icons.book, color: Colors.black),
+                label: _pageLabels[index],
+                backgroundColor: Colors.blue,
               );
             }),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: _pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-            _tabController.index = _currentIndex;
-          });
-        },
-        items: List.generate(_pageLabels.length, (index) {
-          return BottomNavigationBarItem(
-            icon: const Icon(Icons.book, color: Colors.black),
-            label: _pageLabels[index],
-            backgroundColor: Colors.blue,
-          );
-        }),
-      ),
+          ),
+        );
+      },
     );
   }
 }

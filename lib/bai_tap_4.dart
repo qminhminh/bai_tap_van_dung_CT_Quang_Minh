@@ -103,7 +103,7 @@ class _BaiTap04State extends State<BaiTap04> {
               ElevatedButton(
                 onPressed: _processData,
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.teal, // Màu nền của nút
+                  backgroundColor: Colors.teal, // Màu nền của nút
                   padding: const EdgeInsets.symmetric(
                       vertical: 15, horizontal: 20), // Padding cho nút
                   textStyle: const TextStyle(

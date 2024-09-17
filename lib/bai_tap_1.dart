@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last, use_key_in_widget_constructors, library_private_types_in_public_api
+// ignore_for_file: sort_child_properties_last, use_key_in_widget_constructors, library_private_types_in_public_api, unnecessary_const
 
 import 'package:flutter/material.dart';
 
@@ -151,11 +151,14 @@ class _BaiTap01State extends State<BaiTap01> {
                 ),
                 elevation: 5,
               ),
-              child: const Text(
-                'Giải mã',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              child: RichText(
+                text: const TextSpan(
+                  text: 'Giải mã',
+                  style: const TextStyle(
+                    fontSize: 18, // Kích thước chữ
+                    fontWeight: FontWeight.bold, // Kiểu chữ đậm
+                    color: Colors.black, // Màu chữ
+                  ),
                 ),
               ),
             ),
