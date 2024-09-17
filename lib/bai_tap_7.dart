@@ -7,10 +7,34 @@ class BaiTap07 extends StatefulWidget {
   State<BaiTap07> createState() => _BaiTap07State();
 }
 
-class _BaiTap07State extends State<BaiTap07> {
+class _BaiTap07State extends State<BaiTap07> with TickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
   List<int> divisible = []; // Danh sách chứa các số chia hết cho 3
-  int countDivisible = 0; // Đếm số lượng các số chia hết cho 3
+  late AnimationController
+      _animationController; // Controller để điều khiển animation
+  late Animation<double> _animation; // Animation cho hiệu ứng scaling
+  final GlobalKey<AnimatedListState> _listKey =
+      GlobalKey<AnimatedListState>(); // Key để điều khiển AnimatedList
+
+  @override
+  void initState() {
+    super.initState();
+    // Khởi tạo AnimationController
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    // Khởi tạo animation với hiệu ứng scaling
+    _animation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   // Hàm tạo các số mới từ số n bằng cách xóa các chữ số liên tiếp
   Set<int> generateNumbers(int number) {
@@ -41,7 +65,6 @@ class _BaiTap07State extends State<BaiTap07> {
   void calculateDivisible() {
     setState(() {
       divisible.clear(); // Xóa danh sách cũ
-      countDivisible = 0; // Đặt lại số lượng
 
       int number = int.parse(_controller.text); // Lấy số n từ người dùng
       Set<int> numberSet = generateNumbers(number); // Sinh các số từ n
@@ -51,39 +74,25 @@ class _BaiTap07State extends State<BaiTap07> {
         if (num % 3 == 0) {
           // Nếu số đó chia hết cho 3
           divisible.add(num);
-          countDivisible++;
         }
       }
 
-      // Hiển thị kết quả bằng popup
-      _showDialog(divisible, countDivisible);
+      // Cập nhật giao diện và thực hiện animation khi các số mới được thêm vào danh sách
+      _updateList();
     });
   }
 
-  // Hàm hiển thị popup kết quả
-  void _showDialog(List<int> divisibleBy3, int count) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Kết quả",
-              style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
-          content: Text(
-              "Các số chia hết cho 3 là: ${divisibleBy3.join(", ")}\nTổng số: $count",
-              style: const TextStyle(color: Colors.blueAccent, fontSize: 20)),
-          actions: [
-            TextButton(
-              child: const Text(
-                "Đóng",
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); // Đóng dialog
-              },
-            ),
-          ],
-        );
-      },
-    );
+  // Hàm cập nhật AnimatedList và thực hiện animation
+  void _updateList() {
+    _animationController.forward().then((_) {
+      _animationController.reverse();
+    });
+    for (int i = 0; i < divisible.length; i++) {
+      Future.delayed(Duration(milliseconds: i * 100), () {
+        _listKey.currentState
+            ?.insertItem(i, duration: const Duration(milliseconds: 300));
+      });
+    }
   }
 
   @override
@@ -128,6 +137,54 @@ class _BaiTap07State extends State<BaiTap07> {
               child: const Text(
                 "Tính toán",
                 style: TextStyle(fontSize: 18),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          'Có ${divisible.length} số chia hết cho 3:',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Colors.blueAccent, // Thay đổi màu chữ nếu cần
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return ScaleTransition(
+                          scale: _animation,
+                          child: ListTile(
+                            title: Text(
+                              '${divisible[index]}',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 30,
+                                fontFamily: FontWeight.bold.toString(),
+                              ),
+                            ),
+                            leading: const Icon(Icons.numbers),
+                            tileColor:
+                                index.isEven ? Colors.blue[200] : Colors.white,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                          ),
+                        );
+                      },
+                      childCount: divisible.length,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

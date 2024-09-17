@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last
+// ignore_for_file: sort_child_properties_last, use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class _BaiTap01State extends State<BaiTap01> {
   String _draggedNumber = "";
 
   // List of numbers to be draggable
-  final List<String> _numbers = ['11', '22', '21322113'];
+  final List<String> _numbers = ['21322113'];
 
   // Hàm giải mã chuỗi, tìm lại M từ N
   String decode(String encoded) {
@@ -95,6 +95,8 @@ class _BaiTap01State extends State<BaiTap01> {
     final String input = _numberController.text;
     if (input.isEmpty) {
       a = _draggedNumber;
+    } else {
+      a = input;
     }
 
     try {
@@ -207,7 +209,7 @@ class _BaiTap01State extends State<BaiTap01> {
                   child: Center(
                     child: Text(
                       _draggedNumber.isEmpty
-                          ? 'Kéo và thả số vào đây'
+                          ? 'Kéo và thả số vào đây và Ấn nút giải mã'
                           : 'Số đã kéo: $_draggedNumber',
                       style: const TextStyle(color: Colors.white, fontSize: 24),
                     ),
