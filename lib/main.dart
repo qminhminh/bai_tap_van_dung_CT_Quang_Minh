@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen>
       builder: (context, orientation) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Danh sách bài tập'),
+            title: const Text('Danh sách bài tập => Switch chinh dark,light'),
             actions: [
               Switch(
                 value: _isDarkMode,
