@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors, prefer_is_empty
+// ignore_for_file: sort_child_properties_last
 
 import 'package:flutter/material.dart';
 
@@ -9,30 +9,31 @@ class BaiTap01 extends StatefulWidget {
 
 class _BaiTap01State extends State<BaiTap01> {
   final TextEditingController _numberController = TextEditingController();
+  String _draggedNumber = "";
+
+  // List of numbers to be draggable
+  final List<String> _numbers = ['11', '22', '21322113'];
 
   // Hàm giải mã chuỗi, tìm lại M từ N
   String decode(String encoded) {
-    // Giữ chuỗi hiện tại là chuỗi kết quả ban đầu
     String current = encoded;
 
     while (true) {
       String next = '';
       int i = 0;
 
-      // Thực hiện việc giải mã theo dạng: "2" -> số lần lặp, "1" -> số xuất hiện
       while (i < current.length) {
-        int repeatCount = int.parse(current[i]); // Số lần lặp của số
-        String digit = current[i + 1]; // Số cần lặp
-        next += digit * repeatCount; // Thêm vào kết quả số được lặp nhiều lần
-        i += 2; // Tăng i để bỏ qua số đã được xử lý
+        int repeatCount = int.parse(current[i]);
+        String digit = current[i + 1];
+        next += digit * repeatCount;
+        i += 2;
       }
 
-      // Kiểm tra điều kiện dừng: Nếu chiều dài chuỗi giải mã <= 3, chuỗi đã quay về trạng thái ban đầu
       if (next.length <= 3) {
-        return next; // Đây là số M ban đầu
+        return next;
       }
 
-      current = next; // Cập nhật chuỗi cho lần lặp tiếp theo
+      current = next;
     }
   }
 
@@ -90,15 +91,14 @@ class _BaiTap01State extends State<BaiTap01> {
 
   // Handle decoding input
   void _decodeInput() {
+    String a = '';
     final String input = _numberController.text;
-
     if (input.isEmpty) {
-      _showErrorDialog('Vui lòng nhập một số được mã hóa.');
-      return;
+      a = _draggedNumber;
     }
 
     try {
-      final String result = decode(input);
+      final String result = decode(a);
       _showResultDialog(result);
     } catch (e) {
       _showErrorDialog('Một lỗi đã xảy ra trong khi giải mã.');
@@ -110,7 +110,7 @@ class _BaiTap01State extends State<BaiTap01> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Giải mã số'),
-        backgroundColor: Colors.blueAccent, // Thay đổi màu nền của AppBar
+        backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -129,13 +129,11 @@ class _BaiTap01State extends State<BaiTap01> {
               controller: _numberController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                border:
-                    OutlineInputBorder(), // Thay đổi kiểu viền của TextField
+                border: OutlineInputBorder(),
                 labelText: 'Số được mã hóa',
-                prefixIcon: Icon(
-                    Icons.lock), // Thêm biểu tượng vào bên trái của TextField
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: 15, horizontal: 10), // Thay đổi padding nội dung
+                prefixIcon: Icon(Icons.lock),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               ),
             ),
             const SizedBox(height: 20),
@@ -143,23 +141,79 @@ class _BaiTap01State extends State<BaiTap01> {
               onPressed: _decodeInput,
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: Colors.blueAccent, // Màu văn bản của nút
+                backgroundColor: Colors.blueAccent,
                 padding: const EdgeInsets.symmetric(
-                    vertical: 16.0,
-                    horizontal: 24.0), // Khoảng cách bên trong nút
+                    vertical: 16.0, horizontal: 24.0),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(12.0), // Bo tròn các góc của nút
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-                elevation: 5, // Độ cao bóng đổ của nút
+                elevation: 5,
               ),
               child: const Text(
                 'Giải mã',
                 style: TextStyle(
-                  fontSize: 18, // Kích thước chữ
-                  fontWeight: FontWeight.bold, // Độ đậm của chữ
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+            ),
+            const SizedBox(height: 20),
+            // Draggable Widgets for each number in the list
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: _numbers.map((number) {
+                return Draggable<String>(
+                  data: number,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    color: Colors.blueAccent,
+                    child: Text(
+                      number,
+                      style: const TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                  ),
+                  feedback: Container(
+                    padding: const EdgeInsets.all(16),
+                    color: Colors.blueAccent.withOpacity(0.5),
+                    child: Text(
+                      number,
+                      style: const TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                  ),
+                  childWhenDragging: Container(
+                    padding: const EdgeInsets.all(16),
+                    color: Colors.grey,
+                    child: Text(
+                      number,
+                      style: const TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 20),
+            // Drag Target Widget
+            DragTarget<String>(
+              onAccept: (data) {
+                setState(() {
+                  _draggedNumber = data;
+                });
+              },
+              builder: (context, candidateData, rejectedData) {
+                return Container(
+                  height: 100,
+                  color: Colors.blueGrey,
+                  child: Center(
+                    child: Text(
+                      _draggedNumber.isEmpty
+                          ? 'Kéo và thả số vào đây'
+                          : 'Số đã kéo: $_draggedNumber',
+                      style: const TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
