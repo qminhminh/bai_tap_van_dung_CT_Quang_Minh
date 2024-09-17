@@ -90,17 +90,15 @@ class _BaiTap01State extends State<BaiTap01> {
 
   // Handle decoding input
   void _decodeInput() {
-    if (_formKey.currentState?.validate() ?? false) {
-      String input = _numberController.text.isEmpty
-          ? _draggedNumber
-          : _numberController.text;
+    String input = _numberController.text.isEmpty
+        ? _draggedNumber
+        : _numberController.text;
 
-      try {
-        final String result = decode(input);
-        _showResultDialog(result);
-      } catch (e) {
-        _showErrorDialog('Một lỗi đã xảy ra trong khi giải mã.');
-      }
+    try {
+      final String result = decode(input);
+      _showResultDialog(result);
+    } catch (e) {
+      _showErrorDialog('Một lỗi đã xảy ra trong khi giải mã.');
     }
   }
 
