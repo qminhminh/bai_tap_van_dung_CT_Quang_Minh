@@ -138,21 +138,23 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 ...List.generate(_pageLabels.length, (index) {
                   return ListTile(
-                    title: Text(
-                      _pageLabels[index],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                        fontSize: 20,
+                    title: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _currentIndex = index;
+                          _tabController.index = _currentIndex;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        _pageLabels[index],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
-                    onTap: () {
-                      setState(() {
-                        _currentIndex = index;
-                        _tabController.index = _currentIndex;
-                      });
-                      Navigator.pop(context);
-                    },
                   );
                 }),
               ],
