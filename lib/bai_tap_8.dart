@@ -110,9 +110,12 @@ class _BaiTap08State extends State<BaiTap08> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Kết quả'),
-          content: Text(
-              'Số phòng tối thiểu cần dùng: ${totalCost+9}'), // Nội dung của dialog
+          title: const Text('Kết quả',
+              style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
+          content: Text('Số phòng tối thiểu cần dùng: ${totalCost + 9}',
+              style: const TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 20)), // Nội dung của dialog
           actions: <Widget>[
             TextButton(
               onPressed: () {
