@@ -12,61 +12,64 @@ class BaiTap03 extends StatefulWidget {
 
 class _BaiTap03State extends State<BaiTap03> {
   final TextEditingController _numbersController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Phương thức để xử lý dãy số nhập vào.
   void _processNumbers() {
-    // Lấy chuỗi đầu vào từ TextField và chuyển thành danh sách số nguyên.
-    final input = _numbersController.text;
-    final numbers =
-        input.split(',').map((e) => int.tryParse(e.trim()) ?? 0).toList();
-    if (numbers.any((number) => number < 0)) {
-      _showErrorDialog("số phải lớn hơn 0");
-    } else {
-      // Kiểm tra nếu danh sách số trống hoặc có số nhỏ hơn 0.
-      if (numbers.isEmpty) {
-        _showResult('No'); // Hiển thị "No" nếu không có số.
-        return;
-      }
-
-      // Loại bỏ số trùng lặp, sắp xếp theo thứ tự giảm dần.
-      final sortedNumbers = numbers.toSet().toList()
-        ..sort((a, b) => b.compareTo(a));
-
-      // Kiểm tra nếu không có đủ số để xác định số lớn thứ hai.
-      if (sortedNumbers.length < 2) {
-        _showResult('No'); // Hiển thị "No" nếu không có số lớn thứ hai.
-        return;
-      }
-
-      // Lấy số lớn thứ hai từ danh sách đã sắp xếp.
-      final secondLargest = sortedNumbers[1];
-
-      // Kiểm tra xem số lớn thứ hai có phải là số chẵn hay lẻ.
-      final isEven = secondLargest % 2 == 0;
-      // Kiểm tra xem số lớn thứ hai có phải là số nguyên tố.
-      final isPrime = _isPrime(secondLargest);
-
-      // Tính giai thừa của số lớn thứ hai, kiểm tra giá trị số lớn
-      String factorial;
-      if (secondLargest < 100000) {
-        factorial = _factorial(secondLargest)
-            .toString(); // Dùng BigInt cho số không quá lớn
+    if (_formKey.currentState?.validate() ?? false) {
+      // Lấy chuỗi đầu vào từ TextField và chuyển thành danh sách số nguyên.
+      final input = _numbersController.text;
+      final numbers =
+          input.split(',').map((e) => int.tryParse(e.trim()) ?? 0).toList();
+      if (numbers.any((number) => number < 0)) {
+        _showErrorDialog("số phải lớn hơn 0");
       } else {
-        factorial = _stirlingApproximation(secondLargest)
-            .toStringAsFixed(10); // Dùng phép xấp xỉ Stirling
+        // Kiểm tra nếu danh sách số trống hoặc có số nhỏ hơn 0.
+        if (numbers.isEmpty) {
+          _showResult('No'); // Hiển thị "No" nếu không có số.
+          return;
+        }
+
+        // Loại bỏ số trùng lặp, sắp xếp theo thứ tự giảm dần.
+        final sortedNumbers = numbers.toSet().toList()
+          ..sort((a, b) => b.compareTo(a));
+
+        // Kiểm tra nếu không có đủ số để xác định số lớn thứ hai.
+        if (sortedNumbers.length < 2) {
+          _showResult('No'); // Hiển thị "No" nếu không có số lớn thứ hai.
+          return;
+        }
+
+        // Lấy số lớn thứ hai từ danh sách đã sắp xếp.
+        final secondLargest = sortedNumbers[1];
+
+        // Kiểm tra xem số lớn thứ hai có phải là số chẵn hay lẻ.
+        final isEven = secondLargest % 2 == 0;
+        // Kiểm tra xem số lớn thứ hai có phải là số nguyên tố.
+        final isPrime = _isPrime(secondLargest);
+
+        // Tính giai thừa của số lớn thứ hai, kiểm tra giá trị số lớn
+        String factorial;
+        if (secondLargest < 100000) {
+          factorial = _factorial(secondLargest)
+              .toString(); // Dùng BigInt cho số không quá lớn
+        } else {
+          factorial = _stirlingApproximation(secondLargest)
+              .toStringAsFixed(10); // Dùng phép xấp xỉ Stirling
+        }
+
+        // Tính số Fibonacci thứ X (X là số lớn thứ hai).
+        final fibonacci = _fibonacciMatrix(secondLargest);
+
+        // Hiển thị kết quả trong hộp thoại.
+        _showResult(
+          'Số lớn thứ hai: $secondLargest\n' // Số lớn thứ hai.
+          'Chẵn/Lẻ: ${isEven ? "Yes" : "No"}\n' // Kiểm tra chẵn/lẻ.
+          'Nguyên tố: ${isPrime ? "Yes" : "No"}\n' // Kiểm tra số nguyên tố.
+          'Giai thừa: $factorial\n' // Giai thừa của số lớn thứ hai (hoặc phép xấp xỉ Stirling).
+          'Fibonacci: $fibonacci', // Số Fibonacci thứ X.
+        );
       }
-
-      // Tính số Fibonacci thứ X (X là số lớn thứ hai).
-      final fibonacci = _fibonacciMatrix(secondLargest);
-
-      // Hiển thị kết quả trong hộp thoại.
-      _showResult(
-        'Số lớn thứ hai: $secondLargest\n' // Số lớn thứ hai.
-        'Chẵn/Lẻ: ${isEven ? "Yes" : "No"}\n' // Kiểm tra chẵn/lẻ.
-        'Nguyên tố: ${isPrime ? "Yes" : "No"}\n' // Kiểm tra số nguyên tố.
-        'Giai thừa: $factorial\n' // Giai thừa của số lớn thứ hai (hoặc phép xấp xỉ Stirling).
-        'Fibonacci: $fibonacci', // Số Fibonacci thứ X.
-      );
     }
   }
 
@@ -221,22 +224,31 @@ class _BaiTap03State extends State<BaiTap03> {
           crossAxisAlignment: CrossAxisAlignment
               .stretch, // Để các widget mở rộng hết chiều ngang.
           children: [
-            TextField(
-              controller: _numbersController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Nhập các số được phân tách bằng dấu phẩy',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0), // Bo góc viền.
+            Form(
+              key: _formKey, // Key để xác thực form.
+              child: TextFormField(
+                controller: _numbersController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Nhập các số được phân tách bằng dấu phẩy',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0), // Bo góc viền.
+                  ),
+                  prefixIcon: const Icon(
+                      Icons.numbers), // Biểu tượng cho trường nhập liệu.
+                  filled: true, // Nền màu cho trường nhập liệu.
+                  fillColor: Colors.grey[200], // Màu nền cho trường nhập liệu.
                 ),
-                prefixIcon: const Icon(
-                    Icons.numbers), // Biểu tượng cho trường nhập liệu.
-                filled: true, // Nền màu cho trường nhập liệu.
-                fillColor: Colors.grey[200], // Màu nền cho trường nhập liệu.
-              ),
-              style: const TextStyle(
-                fontSize: 18, // Kích thước chữ trong TextField.
-                color: Colors.black87, // Màu chữ trong TextField.
+                style: const TextStyle(
+                  fontSize: 18, // Kích thước chữ trong TextField.
+                  color: Colors.black87, // Màu chữ trong TextField.
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập số';
+                  }
+                  return null;
+                },
               ),
             ),
             const SizedBox(height: 16.0),

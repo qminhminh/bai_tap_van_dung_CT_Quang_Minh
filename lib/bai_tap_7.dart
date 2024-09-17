@@ -15,6 +15,7 @@ class _BaiTap07State extends State<BaiTap07> with TickerProviderStateMixin {
   late Animation<double> _animation; // Animation cho hiệu ứng scaling
   final GlobalKey<AnimatedListState> _listKey =
       GlobalKey<AnimatedListState>(); // Key để điều khiển AnimatedList
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -63,23 +64,25 @@ class _BaiTap07State extends State<BaiTap07> with TickerProviderStateMixin {
 
   // Hàm tính các số chia hết cho 3
   void calculateDivisible() {
-    setState(() {
-      divisible.clear(); // Xóa danh sách cũ
+    if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        divisible.clear(); // Xóa danh sách cũ
 
-      int number = int.parse(_controller.text); // Lấy số n từ người dùng
-      Set<int> numberSet = generateNumbers(number); // Sinh các số từ n
+        int number = int.parse(_controller.text); // Lấy số n từ người dùng
+        Set<int> numberSet = generateNumbers(number); // Sinh các số từ n
 
-      // Lặp qua tất cả các số trong tập D
-      for (int num in numberSet) {
-        if (num % 3 == 0) {
-          // Nếu số đó chia hết cho 3
-          divisible.add(num);
+        // Lặp qua tất cả các số trong tập D
+        for (int num in numberSet) {
+          if (num % 3 == 0) {
+            // Nếu số đó chia hết cho 3
+            divisible.add(num);
+          }
         }
-      }
 
-      // Cập nhật giao diện và thực hiện animation khi các số mới được thêm vào danh sách
-      _updateList();
-    });
+        // Cập nhật giao diện và thực hiện animation khi các số mới được thêm vào danh sách
+        _updateList();
+      });
+    }
   }
 
   // Hàm cập nhật AnimatedList và thực hiện animation
@@ -107,22 +110,30 @@ class _BaiTap07State extends State<BaiTap07> with TickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _controller,
-              keyboardType: TextInputType.number, // Bàn phím số
-              decoration: const InputDecoration(
-                labelText: "Nhập số nguyên n",
-                border: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.teal, width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                ),
-                prefixIcon: Icon(Icons.input, color: Colors.teal),
-              ),
-              style: const TextStyle(fontSize: 18),
-            ),
+            Form(
+                key: _formKey,
+                child: TextFormField(
+                  controller: _controller,
+                  keyboardType: TextInputType.number, // Bàn phím số
+                  decoration: const InputDecoration(
+                    labelText: "Nhập số nguyên n",
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.teal, width: 2.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                    ),
+                    prefixIcon: Icon(Icons.input, color: Colors.teal),
+                  ),
+                  style: const TextStyle(fontSize: 18),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Vui lòng nhập số';
+                    }
+                    return null;
+                  },
+                )),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: calculateDivisible, // Nút để tính toán

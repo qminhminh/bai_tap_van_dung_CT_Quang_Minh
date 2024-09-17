@@ -13,6 +13,7 @@ class _BaiTap06State extends State<BaiTap06> {
   final TextEditingController _aController = TextEditingController();
   final TextEditingController _bController = TextEditingController();
   List<int> beautifulNumbers = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Hàm kiểm tra một số có phải là số nguyên tố hay không
   bool _isPrime(int n) {
@@ -35,23 +36,24 @@ class _BaiTap06State extends State<BaiTap06> {
 
 // Hàm tìm các biển số xe đẹp
   void findBeautifulLicensePlates() {
-    int a = int.tryParse(_aController.text) ??
-        0; // Lấy giá trị A từ ô nhập, nếu không hợp lệ thì mặc định là 0
-    int b = int.tryParse(_bController.text) ??
-        0; // Lấy giá trị B từ ô nhập, nếu không hợp lệ thì mặc định là 0
+    if (_formKey.currentState?.validate() ?? false) {
+      int a = int.tryParse(_aController.text) ??
+          0; // Lấy giá trị A từ ô nhập, nếu không hợp lệ thì mặc định là 0
+      int b = int.tryParse(_bController.text) ??
+          0; // Lấy giá trị B từ ô nhập, nếu không hợp lệ thì mặc định là 0
 
-    beautifulNumbers.clear(); // Xóa danh sách các số đẹp hiện tại
+      beautifulNumbers.clear(); // Xóa danh sách các số đẹp hiện tại
 
-    for (int i = a; i <= b; i++) {
-      // Duyệt qua tất cả các số từ A đến B
-      if (_isPrime(i) && _isPalindrome(i)) {
-        // Kiểm tra xem số i có phải là số nguyên tố và số đối xứng không
-        beautifulNumbers.add(i); // Nếu có, thêm vào danh sách các số đẹp
+      for (int i = a; i <= b; i++) {
+        // Duyệt qua tất cả các số từ A đến B
+        if (_isPrime(i) && _isPalindrome(i)) {
+          // Kiểm tra xem số i có phải là số nguyên tố và số đối xứng không
+          beautifulNumbers.add(i); // Nếu có, thêm vào danh sách các số đẹp
+        }
       }
-    }
 
-    setState(
-        () {}); // Cập nhật lại giao diện để hiển thị danh sách các số đẹp mới
+      setState(() {});
+    } // Cập nhật lại giao diện để hiển thị danh sách các số đẹp mới
   }
 
   @override
@@ -68,34 +70,53 @@ class _BaiTap06State extends State<BaiTap06> {
             sliver: SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  TextField(
-                    controller: _aController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Nhập số A',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      prefixIcon: const Icon(Icons.numbers),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _aController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Nhập số A',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            prefixIcon: const Icon(Icons.numbers),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                          ),
+                          style: const TextStyle(fontSize: 16),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Vui lòng nhập số';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _bController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: 'Nhập số B',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            prefixIcon: const Icon(Icons.numbers),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                          ),
+                          style: const TextStyle(fontSize: 16),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Vui lòng nhập số';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
                     ),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _bController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Nhập số B',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      prefixIcon: const Icon(Icons.numbers),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
-                    ),
-                    style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
