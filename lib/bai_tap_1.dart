@@ -120,7 +120,27 @@ class _BaiTap01State extends State<BaiTap01> {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
+              strutStyle: StrutStyle(
+                fontSize: 18,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.ltr,
+              locale: Locale('vi', 'VN'),
+              softWrap: true,
+              overflow: TextOverflow.ellipsis,
+              // ignore: deprecated_member_use
+              textScaleFactor: 1.0,
+              maxLines: 2,
+              semanticsLabel: 'Label for encoded number input',
+              textWidthBasis: TextWidthBasis.parent,
+              textHeightBehavior: TextHeightBehavior(
+                applyHeightToFirstAscent: false,
+                applyHeightToLastDescent: false,
+              ),
+              selectionColor: Colors.blue,
             ),
+
             const SizedBox(height: 10),
             Form(
               key: _formKey, // Chìa khóa để xác định biểu mẫu
@@ -163,6 +183,29 @@ class _BaiTap01State extends State<BaiTap01> {
                   fontWeight: FontWeight.bold, // Kiểu chữ đậm
                   color: Colors.white, // Màu chữ
                 ),
+                strutStyle: StrutStyle(
+                  fontSize: 18, // Chiều cao dòng tính theo kích thước chữ
+                  height: 1.5, // Chiều cao dòng (line-height)
+                ),
+                textAlign: TextAlign.center, // Căn giữa chữ
+                textDirection: TextDirection.ltr, // Hướng chữ từ trái sang phải
+                locale: Locale('vi', 'VN'), // Ngôn ngữ và vùng Việt Nam
+                softWrap: true, // Tự động xuống dòng nếu vượt quá không gian
+                overflow:
+                    TextOverflow.ellipsis, // Thêm dấu "..." nếu chữ quá dài
+                // ignore: deprecated_member_use
+                textScaleFactor: 1.0, // Tỉ lệ kích thước chữ
+                maxLines: 2, // Giới hạn hiển thị tối đa 2 dòng
+                semanticsLabel:
+                    'Nút giải mã', // Mô tả để hỗ trợ truy cập cho người dùng
+                textWidthBasis: TextWidthBasis.parent, // Định nghĩa độ rộng chữ
+                textHeightBehavior: TextHeightBehavior(
+                  applyHeightToFirstAscent:
+                      false, // Không áp dụng chiều cao lên dòng đầu
+                  applyHeightToLastDescent:
+                      false, // Không áp dụng chiều cao lên dòng cuối
+                ),
+                selectionColor: Colors.blue, // Màu chữ khi được chọn
               ),
             ),
             const SizedBox(height: 20),
