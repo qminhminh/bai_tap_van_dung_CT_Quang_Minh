@@ -112,7 +112,7 @@ class _BaiTap08State extends State<BaiTap08> {
         return AlertDialog(
           title: const Text('Kết quả'),
           content: Text(
-              'Số phòng tối thiểu cần dùng: $totalCost'), // Nội dung của dialog
+              'Số phòng tối thiểu cần dùng: ${totalCost+9}'), // Nội dung của dialog
           actions: <Widget>[
             TextButton(
               onPressed: () {
