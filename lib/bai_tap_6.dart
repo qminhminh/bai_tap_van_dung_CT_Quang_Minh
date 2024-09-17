@@ -1,4 +1,4 @@
-// ignore_for_file: curly_braces_in_flow_control_structures, sort_child_properties_last
+// ignore_for_file: curly_braces_in_flow_control_structures, sort_child_properties_last, unused_element
 
 import 'package:flutter/material.dart';
 
@@ -55,9 +55,12 @@ class _BaiTap06State extends State<BaiTap06> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Kết quả'), // Tiêu đề popup
+        title: const Text('Kết quả',
+            style: TextStyle(
+                color: Colors.blueAccent, fontSize: 30)), // Tiêu đề popup
         content: Text(
-            'Số lượng biển số xe đẹp: ${beautifulNumbers.length}\nBiển số xe đẹp: ${beautifulNumbers.join(', ')}'),
+            'Số lượng biển số xe đẹp: ${beautifulNumbers.length}\nBiển số xe đẹp: ${beautifulNumbers.join(', ')}',
+            style: const TextStyle(color: Colors.blueAccent, fontSize: 20)),
         // Nội dung popup gồm số lượng và danh sách biển số xe đẹp
         actions: [
           TextButton(
@@ -76,8 +79,10 @@ class _BaiTap06State extends State<BaiTap06> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
+          title: const Text('Error',
+              style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
+          content: Text(message,
+              style: const TextStyle(color: Colors.blueAccent, fontSize: 30)),
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),

@@ -19,8 +19,10 @@ class _BaiTap04State extends State<BaiTap04> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Kết quả'),
-          content: Text(result),
+          title: const Text('Kết quả',
+              style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
+          content: Text(result,
+              style: const TextStyle(color: Colors.blueAccent, fontSize: 30)),
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),

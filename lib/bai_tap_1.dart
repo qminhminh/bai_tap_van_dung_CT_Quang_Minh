@@ -42,11 +42,21 @@ class _BaiTap01State extends State<BaiTap01> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Số gốc m'),
-          content: Text(result),
+          title: const Text('Số gốc m',
+              style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
+          content: Text(
+            result,
+            style: TextStyle(
+                fontFamily: FontWeight.bold.toString(),
+                color: Colors.blue,
+                fontSize: 30),
+          ),
           actions: <Widget>[
             TextButton(
-              child: const Text('OK'),
+              child: const Text(
+                'OK',
+                style: TextStyle(fontSize: 20),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },

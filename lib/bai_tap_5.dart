@@ -63,9 +63,12 @@ class _BaiTap05State extends State<BaiTap05> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Kết quả'),
-          content: Text(
-              'Số phòng tối thiểu cần dùng: $rooms'), // Nội dung của dialog
+          title: const Text('Kết quả',
+              style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
+          content: Text('Số phòng tối thiểu cần dùng: $rooms',
+              style: const TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 25)), // Nội dung của dialog
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -84,8 +87,10 @@ class _BaiTap05State extends State<BaiTap05> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
+          title: const Text('Error',
+              style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
+          content: Text(message,
+              style: const TextStyle(color: Colors.blueAccent, fontSize: 30)),
           actions: <Widget>[
             TextButton(
               child: const Text('OK'),

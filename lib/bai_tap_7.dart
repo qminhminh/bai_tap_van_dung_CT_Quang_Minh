@@ -66,12 +66,16 @@ class _BaiTap07State extends State<BaiTap07> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Kết quả"),
+          title: const Text("Kết quả",
+              style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
           content: Text(
-              "Các số chia hết cho 3 là: ${divisibleBy3.join(", ")}\nTổng số: $count"),
+              "Các số chia hết cho 3 là: ${divisibleBy3.join(", ")}\nTổng số: $count",
+              style: const TextStyle(color: Colors.blueAccent, fontSize: 20)),
           actions: [
             TextButton(
-              child: const Text("Đóng"),
+              child: const Text(
+                "Đóng",
+              ),
               onPressed: () {
                 Navigator.of(context).pop(); // Đóng dialog
               },

@@ -181,11 +181,17 @@ class _BaiTap03State extends State<BaiTap03> {
       context: context, // Context của ứng dụng để hiển thị hộp thoại.
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Kết quả'), // Tiêu đề của hộp thoại.
+          title: const Text('Kết quả',
+              style: TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 30)), // Tiêu đề của hộp thoại.
           content: SingleChildScrollView(
             // Thêm cuộn trang ở đây.
-            child:
-                Text(result), // Nội dung của hộp thoại chứa kết quả tính toán.
+            child: Text(result,
+                style: const TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize:
+                        30)), // Nội dung của hộp thoại chứa kết quả tính toán.
           ),
           actions: [
             // Các hành động (nút) trong hộp thoại.

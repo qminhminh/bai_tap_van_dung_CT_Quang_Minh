@@ -35,7 +35,7 @@ class _BaiTap02State extends State<BaiTap02> {
 
     if (a == null || b == null) {
       // Hiển thị thông báo lỗi nếu a hoặc b không hợp lệ
-      _showDialog('Vui lòng nhập các giá trị hợp lệ.');
+      _showResultDialog('Vui lòng nhập các giá trị hợp lệ.');
       return;
     }
 
@@ -53,28 +53,39 @@ class _BaiTap02State extends State<BaiTap02> {
 
     if (totalSum + a + b > 0) {
       // Hiển thị kết quả nếu tổng lớn hơn 0
-      _showDialog(
+      _showResultDialog(
           'Số lượng số chẵn chia hết cho 3: $count\nTổng của chúng: $totalSum');
     } else {
       // Hiển thị thông báo nếu không có số chẵn nào chia hết cho 3
-      _showDialog('Không có số chẵn nào chia hết cho 3 trong đoạn [a, b].');
+      _showResultDialog(
+          'Không có số chẵn nào chia hết cho 3 trong đoạn [a, b].');
     }
   }
 
   // Hàm hiển thị hộp thoại với thông báo kết quả
-  void _showDialog(String message) {
+  void _showResultDialog(String result) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Kết Quả'),
-          content: Text(message),
+          title: const Text('Kết quả',
+              style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
+          content: Text(
+            result,
+            style: TextStyle(
+                fontFamily: FontWeight.bold.toString(),
+                color: Colors.blue,
+                fontSize: 30),
+          ),
           actions: <Widget>[
             TextButton(
+              child: const Text(
+                'OK',
+                style: TextStyle(fontSize: 20),
+              ),
               onPressed: () {
-                Navigator.of(context).pop(); // Đóng hộp thoại khi nhấn nút Đóng
+                Navigator.of(context).pop();
               },
-              child: const Text('Đóng'),
             ),
           ],
         );
