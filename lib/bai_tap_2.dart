@@ -101,7 +101,7 @@ class _BaiTap02State extends State<BaiTap02> {
             ),
           ),
 
-          // Form elements on top of the background
+          // Hình thức các yếu tố trên đầu nền
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Center(

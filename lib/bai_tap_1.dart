@@ -12,7 +12,7 @@ class _BaiTap01State extends State<BaiTap01> {
   String _draggedNumber = "";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  // List of numbers to be draggable
+  //Danh sách các số có thể kéo
   final List<String> _numbers = ['21322113'];
 
   // Hàm giải mã chuỗi, tìm lại M từ N
@@ -38,7 +38,7 @@ class _BaiTap01State extends State<BaiTap01> {
     }
   }
 
-  // Function to show result in a dialog
+  // Chức năng hiển thị kết quả trong hộp thoại
   void _showResultDialog(String result) {
     showDialog(
       context: context,
@@ -88,7 +88,7 @@ class _BaiTap01State extends State<BaiTap01> {
     );
   }
 
-  // Handle decoding input
+  // Xử lý đầu vào giải mã
   void _decodeInput() {
     String input = _numberController.text.isEmpty
         ? _draggedNumber
@@ -123,7 +123,7 @@ class _BaiTap01State extends State<BaiTap01> {
             ),
             const SizedBox(height: 10),
             Form(
-              key: _formKey, // Key to identify the form
+              key: _formKey, // Chìa khóa để xác định biểu mẫu
               child: TextFormField(
                 controller: _numberController,
                 keyboardType: TextInputType.number,
@@ -134,7 +134,7 @@ class _BaiTap01State extends State<BaiTap01> {
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 ),
-                // Validator to check if the field is empty
+                //Trình xác nhận để kiểm tra xem trường có trống không
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Vui lòng nhập số được mã hóa';
@@ -166,7 +166,7 @@ class _BaiTap01State extends State<BaiTap01> {
               ),
             ),
             const SizedBox(height: 20),
-            // Draggable Widgets for each number in the list
+            // Các tiện ích có thể kéo cho mỗi số trong danh sách
             Wrap(
               spacing: 10,
               runSpacing: 10,
@@ -201,7 +201,7 @@ class _BaiTap01State extends State<BaiTap01> {
               }).toList(),
             ),
             const SizedBox(height: 20),
-            // Drag Target Widget
+            // kéo tiện ích mục tiêu
             DragTarget<String>(
               onAccept: (data) {
                 setState(() {
