@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last, use_key_in_widget_constructors, library_private_types_in_public_api, unnecessary_const
+// ignore_for_file: sort_child_properties_last, use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 
@@ -10,6 +10,7 @@ class BaiTap01 extends StatefulWidget {
 class _BaiTap01State extends State<BaiTap01> {
   final TextEditingController _numberController = TextEditingController();
   String _draggedNumber = "";
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // List of numbers to be draggable
   final List<String> _numbers = ['21322113'];
@@ -47,10 +48,8 @@ class _BaiTap01State extends State<BaiTap01> {
               style: TextStyle(color: Colors.blueAccent, fontSize: 30)),
           content: Text(
             result,
-            style: TextStyle(
-                fontFamily: FontWeight.bold.toString(),
-                color: Colors.blue,
-                fontSize: 30),
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.blue, fontSize: 30),
           ),
           actions: <Widget>[
             TextButton(
@@ -68,7 +67,7 @@ class _BaiTap01State extends State<BaiTap01> {
     );
   }
 
-  //Chức năng hiển thị lỗi trong hộp thoại
+  // Chức năng hiển thị lỗi trong hộp thoại
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -91,19 +90,17 @@ class _BaiTap01State extends State<BaiTap01> {
 
   // Handle decoding input
   void _decodeInput() {
-    String a = '';
-    final String input = _numberController.text;
-    if (input.isEmpty) {
-      a = _draggedNumber;
-    } else {
-      a = input;
-    }
+    if (_formKey.currentState?.validate() ?? false) {
+      String input = _numberController.text.isEmpty
+          ? _draggedNumber
+          : _numberController.text;
 
-    try {
-      final String result = decode(a);
-      _showResultDialog(result);
-    } catch (e) {
-      _showErrorDialog('Một lỗi đã xảy ra trong khi giải mã.');
+      try {
+        final String result = decode(input);
+        _showResultDialog(result);
+      } catch (e) {
+        _showErrorDialog('Một lỗi đã xảy ra trong khi giải mã.');
+      }
     }
   }
 
@@ -127,15 +124,25 @@ class _BaiTap01State extends State<BaiTap01> {
               ),
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: _numberController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Số được mã hóa',
-                prefixIcon: Icon(Icons.lock),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            Form(
+              key: _formKey, // Key to identify the form
+              child: TextFormField(
+                controller: _numberController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Số được mã hóa',
+                  prefixIcon: Icon(Icons.lock),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                ),
+                // Validator to check if the field is empty
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập số được mã hóa';
+                  }
+                  return null;
+                },
               ),
             ),
             const SizedBox(height: 20),
@@ -151,14 +158,12 @@ class _BaiTap01State extends State<BaiTap01> {
                 ),
                 elevation: 5,
               ),
-              child: RichText(
-                text: const TextSpan(
-                  text: 'Giải mã',
-                  style: const TextStyle(
-                    fontSize: 18, // Kích thước chữ
-                    fontWeight: FontWeight.bold, // Kiểu chữ đậm
-                    color: Colors.black, // Màu chữ
-                  ),
+              child: const Text(
+                'Giải mã',
+                style: TextStyle(
+                  fontSize: 18, // Kích thước chữ
+                  fontWeight: FontWeight.bold, // Kiểu chữ đậm
+                  color: Colors.white, // Màu chữ
                 ),
               ),
             ),
