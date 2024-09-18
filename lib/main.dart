@@ -1,14 +1,15 @@
 // ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api
 
-import 'package:bai_tap_van_dung_cty/bai_tap_1.dart';
-import 'package:bai_tap_van_dung_cty/bai_tap_2.dart';
-import 'package:bai_tap_van_dung_cty/bai_tap_3.dart';
-import 'package:bai_tap_van_dung_cty/bai_tap_4.dart';
-import 'package:bai_tap_van_dung_cty/bai_tap_5.dart';
-import 'package:bai_tap_van_dung_cty/bai_tap_6.dart';
-import 'package:bai_tap_van_dung_cty/bai_tap_7.dart';
-import 'package:bai_tap_van_dung_cty/bai_tap_8.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'bai_tap_1.dart';
+import 'bai_tap_2.dart';
+import 'bai_tap_3.dart';
+import 'bai_tap_4.dart';
+import 'bai_tap_5.dart';
+import 'bai_tap_6.dart';
+import 'bai_tap_7.dart';
+import 'bai_tap_8.dart';
 
 void main() {
   runApp(MyApp());
@@ -112,14 +113,35 @@ class _HomeScreenState extends State<HomeScreen>
                 },
               ),
             ],
-            bottom: TabBar(
-              controller: _tabController,
-              labelColor: Colors.red,
-              tabs: _pageLabels.map((label) => Tab(text: label)).toList(),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(48.0),
+              child: Container(
+                color: Theme.of(context).appBarTheme.backgroundColor,
+                child: TabBar(
+                  controller: _tabController,
+                  labelColor: Colors.red,
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                  unselectedLabelStyle: const TextStyle(
+                    fontSize: 14.0,
+                  ),
+                  unselectedLabelColor: Colors.grey,
+                  dragStartBehavior: DragStartBehavior.start,
+                  indicatorWeight: 4.0,
+                  indicatorColor: Colors.red,
+                  isScrollable: true, // Cho phép cuộn ngang
+                  tabs: _pageLabels.map((label) => Tab(text: label)).toList(),
+                ),
+              ),
             ),
           ),
           drawer: Drawer(
             child: ListView(
+              scrollDirection: Axis.vertical,
+              // ignore: prefer_const_constructors
+              physics: BouncingScrollPhysics(),
               padding: EdgeInsets.zero,
               children: <Widget>[
                 const DrawerHeader(
@@ -177,6 +199,17 @@ class _HomeScreenState extends State<HomeScreen>
                 backgroundColor: Colors.blue,
               );
             }),
+            elevation: 8.0,
+            type: BottomNavigationBarType.shifting,
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.grey,
+            selectedFontSize: 16.0,
+            unselectedFontSize: 14.0,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            mouseCursor: SystemMouseCursors.click,
+            enableFeedback: true,
+            landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
           ),
         );
       },
