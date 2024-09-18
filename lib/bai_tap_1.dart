@@ -13,7 +13,7 @@ class _BaiTap01State extends State<BaiTap01> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   //Danh sách các số có thể kéo
-  final List<String> _numbers = ['21322113'];
+  final List<String> _numbers = ['21322113', '31', '11', '21', '2111', '2211'];
 
   // Hàm giải mã chuỗi, tìm lại M từ N
   String decode(String encoded) {
