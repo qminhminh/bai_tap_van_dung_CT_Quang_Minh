@@ -1,5 +1,6 @@
-// ignore_for_file: curly_braces_in_flow_control_structures, prefer_const_constructors
+// ignore_for_file: curly_braces_in_flow_control_structures, prefer_const_constructors, sized_box_for_whitespace
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class BaiTap06 extends StatefulWidget {
@@ -157,7 +158,7 @@ class _BaiTap06State extends State<BaiTap06> {
               padding: const EdgeInsets.all(16.0),
               sliver: SliverToBoxAdapter(
                 child: Text(
-                  '(Có ${beautifulNumbers.length} biển số đẹp) (ListView) có thể kéo trái phải để xóa',
+                  '(Có ${beautifulNumbers.length} biển số đẹp) (Sliver ListView) có thể kéo trái phải để xóa',
                   style: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
@@ -187,7 +188,7 @@ class _BaiTap06State extends State<BaiTap06> {
               padding: const EdgeInsets.all(16.0),
               sliver: SliverToBoxAdapter(
                 child: Text(
-                  'Danh sách biển số đẹp (GridView) có thể kéo trái phải để xóa',
+                  'Danh sách biển số đẹp (Sliver GridView) có thể kéo trái phải để xóa',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -218,6 +219,120 @@ class _BaiTap06State extends State<BaiTap06> {
                 crossAxisCount: 3,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
+              ),
+            ),
+            // Sliver ListView.builder
+            SliverPadding(
+              padding: const EdgeInsets.all(16.0),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  'Danh sách biển số đẹp (Listview buidler) có thể kéo trái phải để xóa',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                height: 200, // Set height for the ListView
+                child: ListView.builder(
+                  cacheExtent:
+                      200.0, // Dự trữ khoảng cách cache trước khi render
+                  addAutomaticKeepAlives:
+                      true, // Tự động giữ alive các widget trong gridview
+                  addRepaintBoundaries:
+                      true, // Tự động tối ưu hóa repaint boundaries
+                  addSemanticIndexes:
+                      true, // Thêm semantic index cho các mục (hữu ích cho accessibility)
+                  dragStartBehavior:
+                      DragStartBehavior.start, // Hành vi bắt đầu kéo
+                  clipBehavior: Clip
+                      .hardEdge, // Điều khiển clip nội dung khi vượt khỏi vùng hiển thị
+                  scrollDirection: Axis.vertical,
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
+                      .onDrag, // Ẩn bàn phím khi cuộn
+                  shrinkWrap: true, // Kích thước lưới sẽ thu nhỏ theo nội dung
+                  controller: ScrollController(),
+                  primary:
+                      false, // Nếu true, lưới sẽ tự động được xem là chính (main scroll)
+                  reverse: false, // Không cuộn ngược
+                  itemCount: beautifulNumbers.length,
+                  itemBuilder: (context, index) {
+                    final number = beautifulNumbers[index];
+                    return Dismissible(
+                      key: ValueKey<int>(number),
+                      onDismissed: (direction) {
+                        setState(() {
+                          beautifulNumbers.removeAt(index);
+                        });
+                      },
+                      background: Container(color: Colors.red),
+                      child: ListTile(
+                        title: Text(number.toString()),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            // Sliver GridView.builder
+            SliverPadding(
+              padding: const EdgeInsets.all(16.0),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  'Danh sách biển số đẹp (GridView buidler) có thể kéo trái phải để xóa',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                height: 300, // Set height for the GridView
+                child: GridView.builder(
+                  cacheExtent:
+                      200.0, // Dự trữ khoảng cách cache trước khi render
+                  addAutomaticKeepAlives:
+                      true, // Tự động giữ alive các widget trong gridview
+                  addRepaintBoundaries:
+                      true, // Tự động tối ưu hóa repaint boundaries
+                  addSemanticIndexes:
+                      true, // Thêm semantic index cho các mục (hữu ích cho accessibility)
+                  dragStartBehavior:
+                      DragStartBehavior.start, // Hành vi bắt đầu kéo
+                  clipBehavior: Clip
+                      .hardEdge, // Điều khiển clip nội dung khi vượt khỏi vùng hiển thị
+                  scrollDirection: Axis.vertical,
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
+                      .onDrag, // Ẩn bàn phím khi cuộn
+                  shrinkWrap: true, // Kích thước lưới sẽ thu nhỏ theo nội dung
+                  controller: ScrollController(),
+                  primary:
+                      false, // Nếu true, lưới sẽ tự động được xem là chính (main scroll)
+                  reverse: false, // Không cuộn ngược
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: beautifulNumbers.length,
+                  itemBuilder: (context, index) {
+                    final number = beautifulNumbers[index];
+                    return Dismissible(
+                      key: ValueKey<int>(number),
+                      onDismissed: (direction) {
+                        setState(() {
+                          beautifulNumbers.removeAt(index);
+                        });
+                      },
+                      background: Container(color: Colors.red),
+                      child: Card(
+                        child: Center(
+                          child: Text(number.toString(),
+                              style: const TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],
