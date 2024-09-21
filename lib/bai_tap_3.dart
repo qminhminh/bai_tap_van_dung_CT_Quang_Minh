@@ -1,6 +1,7 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: curly_braces_in_flow_control_structures, unnecessary_brace_in_string_interps, avoid_print, prefer_if_null_operators
 
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class BaiTap03 extends StatefulWidget {
@@ -13,10 +14,17 @@ class BaiTap03 extends StatefulWidget {
 class _BaiTap03State extends State<BaiTap03> {
   final TextEditingController _numbersController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  BigInt? factorial;
+  bool _isProcessing = false;
+  String? factorialResult;
 
   // Phương thức để xử lý dãy số nhập vào.
-  void _processNumbers() {
+  void _processNumbers() async {
     if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        _isProcessing = true;
+      });
+
       // Lấy chuỗi đầu vào từ TextField và chuyển thành danh sách số nguyên.
       final input = _numbersController.text;
       final numbers =
@@ -49,28 +57,52 @@ class _BaiTap03State extends State<BaiTap03> {
         final isPrime = _isPrime(secondLargest);
 
         // Tính giai thừa của số lớn thứ hai, kiểm tra giá trị số lớn
-        String factorial;
+        //  String factorial;
         if (secondLargest < 30000) {
-          factorial = _factorial(secondLargest)
-              .toString(); // Dùng BigInt cho số không quá lớn
+          factorial = await compute(_factorial, BigInt.from(secondLargest));
+
+          // Dùng BigInt cho số không quá lớn
         } else {
-          factorial = _stirlingApproximation(secondLargest)
-              .toStringAsFixed(10); // Dùng phép xấp xỉ Stirling
+          factorialResult = _stirlingApproximation(secondLargest)
+              .toStringAsFixed(10); // Xấp xỉ Stirling
+          // factorial = _stirlingApproximation(secondLargest)
+          //     .toStringAsFixed(10); // Dùng phép xấp xỉ Stirling
         }
 
         // Tính số Fibonacci thứ X (X là số lớn thứ hai).
         final fibonacci = _fibonacciMatrix(secondLargest);
-
+        setState(() {
+          _isProcessing = false; // Kết thúc trạng thái xử lý
+        });
+        print("giai thua: +${factorial} +${factorialResult}");
         // Hiển thị kết quả trong hộp thoại.
         _showResult(
           'Số lớn thứ hai: $secondLargest\n' // Số lớn thứ hai.
           'Chẵn/Lẻ: ${isEven ? "Yes" : "No"}\n' // Kiểm tra chẵn/lẻ.
           'Nguyên tố: ${isPrime ? "Yes" : "No"}\n' // Kiểm tra số nguyên tố.
-          'Giai thừa: $factorial\n' // Giai thừa của số lớn thứ hai (hoặc phép xấp xỉ Stirling).
+          'Giai thừa: ${factorial == null ? factorialResult : factorial}\n' // Giai thừa của số lớn thứ hai (hoặc phép xấp xỉ Stirling).
           'Fibonacci: $fibonacci', // Số Fibonacci thứ X.
         );
       }
     }
+  }
+
+  String _factorialToScientific(BigInt factorial) {
+    int trailingZeros = _countTrailingZeros(factorial);
+    BigInt powerOfTen = BigInt.from(10).pow(trailingZeros);
+    BigInt resultWithoutTrailingZeros = factorial ~/ powerOfTen;
+
+    return '${resultWithoutTrailingZeros}e+$trailingZeros';
+  }
+
+  int _countTrailingZeros(BigInt factorial) {
+    int count = 0;
+    BigInt number = BigInt.from(5);
+    while (number <= factorial) {
+      count += (factorial ~/ number).toInt();
+      number *= BigInt.from(5);
+    }
+    return count;
   }
 
   // Chức năng hiển thị lỗi trong hộp thoại
@@ -110,17 +142,6 @@ class _BaiTap03State extends State<BaiTap03> {
   }
 
   // Phương thức tính giai thừa của một số sử dụng BigInt.
-  BigInt _factorial(int num) {
-    if (num < 0) return BigInt.zero; // Giai thừa không định nghĩa cho số âm.
-    BigInt result = BigInt.one; // Bắt đầu với 1.
-
-    // Tính giai thừa từ 1 đến num.
-    for (int i = 1; i <= num; i++) {
-      result *= BigInt.from(i);
-    }
-
-    return result; // Trả về giai thừa sử dụng BigInt.
-  }
 
   // Phương thức tính giai thừa theo xấp xỉ Stirling cho số lớn.
   double _stirlingApproximation(int n) {
@@ -254,7 +275,7 @@ class _BaiTap03State extends State<BaiTap03> {
                 autofocus: false,
                 focusNode: FocusNode(),
                 clipBehavior: Clip.antiAlias,
-                onPressed: _processNumbers,
+                onPressed: _isProcessing ? null : _processNumbers,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal, // Màu nền của nút.
                   shape: RoundedRectangleBorder(
@@ -263,10 +284,13 @@ class _BaiTap03State extends State<BaiTap03> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 16.0), // Padding cho nút.
                 ),
-                child: const Text(
-                  'Tìm và xử lý số lớn thứ hai',
-                  style: TextStyle(fontSize: 16), // Kích thước chữ trên nút.
-                ),
+                child: _isProcessing
+                    ? const CircularProgressIndicator()
+                    : const Text(
+                        'Tìm và xử lý số lớn thứ hai',
+                        style:
+                            TextStyle(fontSize: 16), // Kích thước chữ trên nút.
+                      ),
               ),
             ],
           ),
@@ -274,4 +298,12 @@ class _BaiTap03State extends State<BaiTap03> {
       ),
     );
   }
+}
+
+BigInt _factorial(BigInt num) {
+  BigInt result = BigInt.one;
+  for (BigInt i = BigInt.from(2); i <= num; i = i + BigInt.one) {
+    result *= i;
+  }
+  return result;
 }

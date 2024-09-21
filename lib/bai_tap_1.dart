@@ -37,6 +37,32 @@ class _BaiTap01State extends State<BaiTap01> {
       current = next;
     }
   }
+//   BigInt decode(BigInt encoded) {
+//   BigInt current = encoded;
+
+//   while (true) {
+//     BigInt next = BigInt.zero;
+//     int i = 0;
+//     String currentStr = current.toString(); // Chuyển BigInt về chuỗi để xử lý từng chữ số
+
+//     // Xử lý từng ký tự trong chuỗi số
+//     while (i < currentStr.length) {
+//       int repeatCount = int.parse(currentStr[i]); // Số lần lặp
+//       String digit = currentStr[i + 1]; // Chữ số cần lặp
+
+//       // Nhân chữ số với số lần lặp và thêm vào kết quả
+//       next = next * BigInt.from(10).pow(repeatCount) + BigInt.parse(digit * repeatCount);
+
+//       i += 2; // Tiến sang cặp số tiếp theo
+//     }
+
+//     if (next.toString().length <= 3) {
+//       return next; // Trả về kết quả khi chiều dài của chuỗi kết quả <= 3
+//     }
+
+//     current = next; // Gán lại current cho vòng lặp tiếp theo
+//   }
+// }
 
   // Chức năng hiển thị kết quả trong hộp thoại
   void _showResultDialog(String result) {
